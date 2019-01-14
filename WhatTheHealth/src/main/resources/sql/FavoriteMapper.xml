@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FavoriteMapper">
+
+	<resultMap id="favoriteSelectMap" type="com.wthealth.domain.Like">
+		<result property="postNo" column="post_no" jdbcType="VARCHAR" />
+		<result property="favoriteNo" column="favorite_no" jdbcType="VARCHAR" />
+		<result property="userId" column="user_id" jdbcType="VARCHAR" />
+		<result property="favoriteType" column="favorite_type" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<!-- SQL : INSERT -->
+	<insert id="addLike" parameterType="com.wthealth.domain.Like">
+		INSERT
+		INTO favorite(favorite_no, post_no, user_id, favorite_type)
+		VALUES
+		(seq_favorite_favorite_no.nextval, #{postNo}, #{userId}, '0')
+	</insert>
+	
+	<delete	id="deleteLike"	parameterType="list" >
+	  	DELETE
+	  	FROM favorite
+	  	<where>
+	  		<if test = "favoriteType = 0">
+	  			post_no = #{postNo}	
+	  		</if>
+	  	</where>
+	  </delete>
+	  
+	  <insert id="addInterest" parameterType="com.wthealth.domain.Interest">
+		INSERT
+		INTO favorite(favorite_no, post_no, user_id, favorite_type)
+		VALUES
+		(seq_favorite_favorite_no.nextval, #{postNo}, #{userId}, '1')
+	 </insert>
+	
+	<delete	id="deleteInterest"	parameterType="list" >
+	  	DELETE
+	  	FROM favorite
+	  	<where>
+	  		<if test = "favoriteType = 1">
+	  			post_no = #{postNo}	
+	  		</if>
+	  	</where>
+	  </delete>
+	  
+	  <!-- SQL : SELECT ONE -->
+<!-- 	<select id="getInterest" resultMap="postSelectMap" parameterType="string">
+		SELECT p.post_no, p.category, p.title, p.post_date
+		FROM favorite f, post p
+		WHERE f.user_id = p.user_id
+		AND f.favorite_type='1'
+		AND f.user_id = #{value}
+	</select> -->
+	
+</mapper>

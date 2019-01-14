@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AdminManageMapper">
+ 	
+ 	
+	<resultMap id="exInfoSelectMap" type="com.wthealth.domain.Post">	
+     	 <!-- user정보 -->
+     	 <result property="userId" 		column="user_id"			 jdbcType="VARCHAR" />
+     	 <result property="nickName" 		column="nickname"		 	 jdbcType="VARCHAR" />	 
+     	 <!-- 게시물  -->
+     	 <result property="postNo" 			column="post_no"			 jdbcType="VARCHAR" />
+     	 <result property="title" 			column="title"				 jdbcType="VARCHAR" />
+     	 <result property="photo"			column="photo" 				 jdbcType="VARCHAR" />
+     	 <result property="video"			column="video" 				 jdbcType="VARCHAR" />
+     	 <result property="contents" 		column="contents"			 jdbcType="VARCHAR" />
+     	 <result property="clickCount"  	column="click_count"		 jdbcType="NUMERIC" />
+      	 <result property="blindStatus"	 	column="blind_status" 		 jdbcType="VARCHAR" />
+      	 <result property="deleteStatus" 	column="delete_status" 		 jdbcType="VARCHAR" />
+      	 <result property="likeCount" 		column="like_count" 		 jdbcType="NUMERIC" />
+     	 <result property="category" 		column="category" 		 	 jdbcType="VARCHAR" />
+      	 <result property="postDate" 		column="post_date"	 	 	 jdbcType="DATE" />
+      	 <!-- 운동정보 -->
+      	 <result property="exInfoNo"	 	column="blind_status" 		 jdbcType="NUMERIC" />
+      	 <result property="exCalorie" 		column="delete_status" 		 jdbcType="NUMERIC" />
+      	 <result property="exPlace" 		column="like_count" 		 jdbcType="VARCHAR" />
+      	 <result property="exPart" 			column="delete_status" 		 jdbcType="VARCHAR" />
+      	 <result property="exVideoTime" 	column="like_count" 		 jdbcType="VARCHAR" />
+      	 <!-- 스케줄 -->
+      	 <result property="exScNo" 			column="ex_sc_no" 	     	 jdbcType="NUMERIC" />
+      	 <result property="dietScNo" 		column="diet_sc_no" 	 	 jdbcType="NUMERIC" />
+		 <!-- 위치태그 --> 
+      	 <result property="locationTagName" column="locationtag_name"	 jdbcType="VARCHAR" />
+     	 <result property="xCoordinate" 	column="x_coordinate" 		 jdbcType="NUMERIC" />
+     	 <result property="yCoordinate" 	column="y_coordinate" 		 jdbcType="NUMERIC" />
+     	 <result property="address"			column="address" 			 jdbcType="VARCHAR" />
+   </resultMap>
+	
+	
+	<!-- SQL : INSERT :: POST TABLE 등록-->
+	  <insert id="addPost" parameterType="com.wthealth.domain.Post">
+	    INSERT INTO
+	    	post(post_no, title, video, contents, photo, category, post_date)
+	    VALUES
+	    	(seq_post_post_no.nextval, #{title}, #{video}, #{contents}, #{photo}, #{category}, sysdate )
+	    <selectKey keyProperty="postNo" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		
+	  </insert>
+	  
+	<!-- SQL : INSERT :: EX_INFO TABLE 등록-->  
+	  <insert id="addExInfo" parameterType="com.wthealth.domain.Post">
+	    INSERT INTO
+	    	ex_info
+	    VALUES
+	    	(seq_ex_info_ex_info_no.nextval, #{postNo}, #{ex_calorie}, #{ex_place}, #{ex_part}, #{ex_videotime} )
+	  </insert>	  
+	  
+	
+	<!-- SQL : SELECT ONE :: 운동정보게시물 조회 -->
+	 <select 	id="getExInfo"	parameterType="int" resultMap="exInfoSelectMap">
+		SELECT 
+  			p.title, e.ex_part, p.video, e.ex_videoTime, e.ex_calorie, p.contents, e.ex_info_no
+	    FROM 
+  			post p, ex_info e
+		WHERE
+  			e.post_no = #{value}             
+	 </select>
+  
+ 	<!-- SQL : UPDATE :: 게시물 수정  -->
+	 <update 	id="updatePost"	parameterType="com.wthealth.domain.Post">
+		UPDATE post
+         <set>
+  			title = #{title}, 
+  			video = #{video}, 
+  			contents = #{contents}, 
+  			photo = #{photo}, 
+  			category = #{category}			
+         </set>
+       WHERE post = #{postNo}
+    </update>
+
+ 	<!-- SQL : UPDATE :: 운동정보게시물 수정  -->
+	 <update 	id="updateExInfo"	parameterType="com.wthealth.domain.Post">
+		UPDATE ex_info			
+         <set>
+  			exCalorie = #{ex_calorie}, 
+  			exPlace = #{ex_place}, 
+  			exPart = #{ex_part}, 
+  			exVideoTime = #{ex_videotime}						         
+         </set>
+         WHERE ex_info = #{postNo}
+    </update>
+	 
+		 
+	<select  id="listExInfo"  parameterType="com.wthealth.common.Search"	resultMap="exInfoSelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.*, ROWNUM AS row_seq
+	  			FROM (	SELECT 
+	  			        	p.title, p.post_date, nickName, p.photo, p.post_no,  			
+					    FROM 
+					    	post
+								<if test="searchCondition != null ">
+								   <where>
+									  <if test="searchCondition == 0 and searchKeyword !='' ">
+									 	   title LIKE '%'||#{searchKeyword}||'%'
+									  </if>
+									  <if test="searchCondition == 1 and searchKeyword !='' ">
+										   contents LIKE '%'||#{searchKeyword}||'%'
+									  </if>
+								   </where>
+								</if>
+		
+							  <if test="searchFilter' == 0">
+									ORDER BY prd.price DESC
+							  </if>
+							  <if test="sortCondition=='asc'">
+									ORDER BY prd.price ASC
+							  </if>
+						    ORDER BY user_id ) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} )
+	   WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+	 </select>
+
+	 <select  id="getTotalCount"  parameterType="com.wthealth.common.Search"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT 
+	  				user_id, nickname, reg_date, user_status_code 
+				FROM users
+				
+						<if test="searchCondition != null">
+							<where>
+								<if test="searchCondition == 0 and searchKeyword !='' ">
+									 user_id LIKE '%'||#{searchKeyword}||'%'
+							    </if>
+							    <if test="searchCondition == 1 and searchKeyword !='' ">
+								     nickname LIKE '%'||#{searchKeyword}||'%'
+								</if>
+							</where>
+						</if> 
+				        <if test="searchFilter != null">
+							<where>
+								  	user_status_code = #{searchFilter}											   
+						    </where>
+					     </if>	
+				) countTable									
+	 </select>
+	  
+	  
+</mapper>
