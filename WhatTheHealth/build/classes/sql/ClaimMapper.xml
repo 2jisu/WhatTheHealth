@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ClaimMapper">
+ 	
+ 	
+	<resultMap id="claimSelectMap" type="com.wthealth.domain.Claim">
+		<result property="claimNo" 				column="claim_no" 						jdbcType="NUMERIC"/>
+		<result property="userId"					column="user_id" 						jdbcType="VARCHAR" />
+		<result property="claimedUserId" 		column="claimed_id" 					jdbcType="VARCHAR" />
+		<result property="claimDate" 			column="claim_date" 					jdbcType="DATE" />
+		<result property="claimSortNo" 			column="claim_type" 					jdbcType="VARCHAR" />
+		<result property="claimStatus" 			column="claim_status" 					jdbcType="VARCHAR" />		
+		<result property="claimReasonNo" 		column="claim_reason" 					jdbcType="VARCHAR" />		
+		<result property="targetNo" 				column="claim_target_no" 				jdbcType="VARCHAR" />
+		<result property="claimContents" 		column="claim_contents" 				jdbcType="VARCHAR" />	
+	</resultMap>
+		
+	<!-- SQL : INSERT DIET_SC -->
+	<insert 	id="addClaim"		parameterType="com.wthealth.domain.Claim" >
+	 	INSERT
+		INTO claim( claim_no, user_id, claimed_id, claim_date, claim_type, claim_status, claim_reason, claim_target_no, claim_contents ) 
+		VALUES	 (	seq_claim_claim_no.NEXTVAL , #{userId} , #{claimedUserId}, SYSDATE,  #{claimSortNo}, #{claimStatus} , #{claimReasonNo},#{targetNo}, #{claimContents} )
+	 </insert>
+	 
+	 <update id = "updateClaim"  parameterType = "com.wthealth.domain.Claim" >
+		Update claim 
+			<set>
+				 claim_status = #{claimStatus}
+			</set>
+			where claim_no = #{claimNo}
+	 </update>
+	 
+	<!-- SQL : SELECT LIST  -->
+	<select  id="listClaim"  parameterType="map"	 resultMap="claimSelectMap">
+	  		SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM (SELECT * 
+	  	FROM claim	) inner_table
+						WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	 </select>
+	 
+	  <select  id="getTotalCount"  parameterType="java.lang.String"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT * FROM claim ) countTable			
+	 </select>
+	 	
+</mapper>

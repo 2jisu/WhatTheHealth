@@ -23,7 +23,7 @@ public interface ReplyService {
 	//public void deleteReReply(int replyNo) throws Exception;
 	
 	//SELECT LIST
-	public Map<String , Object> listReply(Search search) throws Exception;
+	public Map<String , Object> listReply(Search search, String postNo) throws Exception;
 	
 	//SELECT LIST MY REPLY 
 	public Map<String , Object> listMyReply(Search search, String writerId) throws Exception;

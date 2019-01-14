@@ -12,6 +12,7 @@ public class Join {
 	private String postNo;
 	private String partyId;
 	private String deleteStatus;
+	private Date meetTime;
 	
 	///Constructor
 	public Join() {
@@ -74,11 +75,20 @@ public class Join {
 		this.deleteStatus = deleteStatus;
 	}
 
+	
+	public Date getMeetTime() {
+		return meetTime;
+	}
+
+	public void setMeetTime(Date meetTime) {
+		this.meetTime = meetTime;
+	}
+
 	@Override
 	public String toString() {
 		return "Join [joinNo=" + joinNo + ", joinDate=" + joinDate + ", joinStatus=" + joinStatus + ", depoStatus="
-				+ depoStatus + ", postNo=" + postNo + ", partyId=" + partyId + ", deleteStatus=" + deleteStatus + "]";
+				+ depoStatus + ", postNo=" + postNo + ", partyId=" + partyId + ", deleteStatus=" + deleteStatus
+				+ ", meetTime=" + meetTime + "]";
 	}
-
 	
 }
