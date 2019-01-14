@@ -74,6 +74,15 @@
 			y_coordinate = #{yCoordinate:NUMERIC},
 			address = #{address:VARCHAR}
 		</set>
+		WHERE post_no = #{postNo}
+	</update>
+	
+	<!-- SQL : UPDATE -->
+	<update id="deleteExCom" parameterType="com.wthealth.domain.Post">
+		UPDATE post
+		<set>
+			delete_status = '1'
+		</set>
 		WHERE post_no = #{value}
 	</update>
 
@@ -87,24 +96,18 @@
 			<where>
 				<if test="searchCondition == 0 and searchKeyword !='' ">
 					title LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no ) inner_table
 				</if>
 				<if test="searchCondition == 1 and searchKeyword !='' ">
 					user_id LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no ) inner_table
 				</if>
 				<if test="searchCondition == 2 and searchKeyword !='' ">
-					contents LIKE '%'||#{searchKeyord}||'%'
-					ORDER BY post_no ) inner_table
-				</if>
-				<if test="searchCondition == 3">
-					ORDER BY likeCount ) inner_table
+					contents LIKE '%'||#{searchKeyword}||'%'
 				</if>
 			</where>
 		</if>
+		ORDER BY post_no ) inner_table
 		WHERE ROWNUM &lt;= #{endRowNum} )
-		WHERE row_seq BETWEEN #{startRowNum} AND
-		#{endRowNum}
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
 	<!-- 위 두번째 subQuery 의 WHERE ROWNUM &lt;= #{endRowNum} ) 는 WHERE ROWNUM <= 
 		#{endRowNum} ) 의미이며.. < 는 keyword 로 &lt; 를 사용. <![CDATA[ ~~~ ]]> 를 이용하여 아래와 
@@ -114,9 +117,13 @@
 	<!-- SQL : SELECT LIST -->
 	<select id="listExComRecom" resultMap="postSelectMap" parameterType="com.wthealth.common.Search">
 		SELECT *
+		FROM ( SELECT inner_table.* , ROWNUM AS row_seq
+		FROM ( SELECT *
 		FROM	post
 		WHERE	post_no LIKE 'EC%'
-		ORDER BY like_count
+		AND	ROWNUM &lt;= 3
+		ORDER BY like_count) inner_table
+		WHERE ROWNUM &lt;= #{endRowNum} )
 	</select>
 	
 	<!-- SQL : SELECT ROW Count -->
@@ -128,18 +135,12 @@
 			<where>
 				<if test="searchCondition == 0 and searchKeyword !='' ">
 					title LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no ) inner_table
 				</if>
 				<if test="searchCondition == 1 and searchKeyword !='' ">
 					user_id LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no ) inner_table
 				</if>
 				<if test="searchCondition == 2 and searchKeyword !='' ">
-					contents LIKE '%'||#{searchKeyord}||'%'
-					ORDER BY post_no ) inner_table
-				</if>
-				<if test="searchCondition == 3">
-					ORDER BY likeCount ) inner_table
+					contents LIKE '%'||#{searchKeyword}||'%'
 				</if>
 			</where>
 		</if>

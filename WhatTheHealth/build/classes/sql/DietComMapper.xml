@@ -29,27 +29,20 @@
 		<result property="address" column="address" jdbcType="VARCHAR" />
 	</resultMap>
 
-	<!-- SQL : INSERT -->
 	<insert id="addDietCom" parameterType="com.wthealth.domain.Post">
 		INSERT
-		INTO post(post_no,
-		user_id, title, contents, photo, video,
-		click_count, blind_status,
-		delete_status, like_count,
-		category, post_date, diet_sc_no,
-		locationtag_name, x_coordinate,
-		y_coordinate, address)
+		INTO post(post_no, user_id, title, contents, photo, video,
+		click_count, blind_status, delete_status, like_count,
+		category, post_date, diet_sc_no, locationtag_name, x_coordinate, y_coordinate, address)
 		VALUES
 		('DC'||seq_post_post_no.nextval, #{userId}, #{title}, #{contents},
-		#{photo:VARCHAR},
-		#{video:VARCHAR}, 0, '0', '0', 0,
-		#{category:VARCHAR}, SYSDATE,
-		#{dietScNo:NUMERIC}, #{locationTagName:VARCHAR}, #{xCoordinate:NUMERIC},
-		#{yCoordinate:NUMERIC},
-		#{address:VARCHAR})
+		#{photo:VARCHAR}, #{video:VARCHAR}, 0, '0', '0', 0, #{category:VARCHAR}, SYSDATE,
+		#{dietScNo:NUMERIC}, #{locationTagName:VARCHAR}, #{xCoordinate:NUMERIC}, #{yCoordinate:NUMERIC}, #{address:VARCHAR})
+		 <selectKey resultType="String" keyProperty = "postNo" order="AFTER">
+         SELECT 'DC'||seq_post_post_no.nextval FROM dual
+     	</selectKey>
 	</insert>
 
-	<!-- SQL : SELECT ONE -->
 	<select id="getDietCom" resultMap="postSelectMap" parameterType="string">
 		SELECT
 		post_no, user_id, title, contents, photo, video,
@@ -62,7 +55,6 @@
 		WHERE post_no = #{value}
 	</select>
 
-	<!-- SQL : UPDATE -->
 	<update id="updateDietCom" parameterType="com.wthealth.domain.Post">
 		UPDATE post
 		<set>
@@ -88,12 +80,18 @@
 			address
 			= #{address:VARCHAR}
 		</set>
+		WHERE post_no = #{postNo}
+	</update>
+	
+	<update id="deleteDietCom" parameterType="com.wthealth.domain.Post">
+		UPDATE post
+		<set>
+			delete_status = '1'
+		</set>
 		WHERE post_no = #{value}
 	</update>
 
-	<!-- SQL : SELECT LIST -->
-	<select id="listDietCom" resultMap="postSelectMap"
-		parameterType="com.wthealth.common.Search">
+	<select id="listDietCom" resultMap="postSelectMap" parameterType="com.wthealth.common.Search">
 		SELECT *
 		FROM ( SELECT inner_table.* , ROWNUM AS row_seq
 		FROM ( SELECT *
@@ -102,24 +100,16 @@
 			<where>
 				<if test="searchCondition == 0 and searchKeyword !='' ">
 					title LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no )
-					inner_table
 				</if>
 				<if test="searchCondition == 1 and searchKeyword !='' ">
 					user_id LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no
-					) inner_table
 				</if>
 				<if test="searchCondition == 2 and searchKeyword !='' ">
-					contents LIKE '%'||#{searchKeyord}||'%'
-					ORDER BY post_no
-					) inner_table
-				</if>
-				<if test="searchCondition == 3">
-					ORDER BY likeCount ) inner_table
+					contents LIKE '%'||#{searchKeyword}||'%'
 				</if>
 			</where>
 		</if>
+		ORDER BY post_no) inner_table
 		WHERE ROWNUM &lt;= #{endRowNum} )
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
@@ -129,21 +119,16 @@
 		<![CDATA[ <=]]> #{endRowNum} ) -->
 
 	<!-- SQL : SELECT LIST -->
-	<select id="listExComRecom" resultMap="postSelectMap"
-		parameterType="com.wthealth.common.Search">
-		SELECT *
-		FROM post
-		WHERE post_no LIKE 'EC%'
-		ORDER BY
-		like_count
-	</select>
-	
-	<!-- SQL : SELECT LIST -->
 	<select id="listDietComRecom" resultMap="postSelectMap" parameterType="com.wthealth.common.Search">
 		SELECT *
+		FROM ( SELECT inner_table.* , ROWNUM AS row_seq
+		FROM ( SELECT *
 		FROM	post
 		WHERE	post_no LIKE 'DC%'
-		ORDER BY like_count
+		AND	ROWNUM &lt;= 3
+		ORDER BY like_count) inner_table
+		WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
 	
 	<!-- SQL : SELECT ROW Count -->
@@ -155,21 +140,12 @@
 			<where>
 				<if test="searchCondition == 0 and searchKeyword !='' ">
 					title LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no )
-					inner_table
 				</if>
 				<if test="searchCondition == 1 and searchKeyword !='' ">
 					user_id LIKE '%'||#{searchKeyword}||'%'
-					ORDER BY post_no
-					) inner_table
 				</if>
 				<if test="searchCondition == 2 and searchKeyword !='' ">
-					contents LIKE '%'||#{searchKeyord}||'%'
-					ORDER BY post_no
-					) inner_table
-				</if>
-				<if test="searchCondition == 3">
-					ORDER BY likeCount ) inner_table
+					contents LIKE '%'||#{searchKeyword}||'%'
 				</if>
 			</where>
 		</if>
