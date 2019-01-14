@@ -57,9 +57,9 @@ public class ReplyServiceImpl implements ReplyService {
 	}*/
 
 	@Override
-	public  Map<String , Object> listReply(Search search) throws Exception {
-		List<Reply> list = replyDao.listReply(search);
-		int totalCount = replyDao.getTotalCount(search);
+	public  Map<String , Object> listReply(Search search, String postNo) throws Exception {
+		List<Reply> list = replyDao.listReply(search, postNo);
+		int totalCount = replyDao.getTotalCount(postNo);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
@@ -71,7 +71,7 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public Map<String, Object> listMyReply(Search search, String writerId) throws Exception {
 		List<Reply> list = replyDao.listMyReply(search, writerId);
-		int totalCount = replyDao.getTotalCountMyList(writerId);
+		int totalCount = replyDao.getTotalCountMyReply(writerId);
 		
 		Map<String, Object>	map = new HashMap<String, Object>();
 		map.put("list", list);

@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Socket {
 	
 	///Field
-	private int liveNo;
+	private int socketNo;
 	private String bjId;
 	private Date liveDate;
 	private String liveTitle;
@@ -20,12 +20,12 @@ public class Socket {
 	}
 
 	///Method
-	public int getLiveNo() {
-		return liveNo;
+	public int getSocketNo() {
+		return socketNo;
 	}
 
-	public void setLiveNo(int liveNo) {
-		this.liveNo = liveNo;
+	public void setSocketNo(int socketNo) {
+		this.socketNo = socketNo;
 	}
 
 	public String getBjId() {
@@ -94,7 +94,7 @@ public class Socket {
 
 	@Override
 	public String toString() {
-		return "Socket [liveNo=" + liveNo + ", bjId=" + bjId + ", liveDate=" + liveDate + ", liveTitle=" + liveTitle
+		return "Socket [socketNo=" + socketNo + ", bjId=" + bjId + ", liveDate=" + liveDate + ", liveTitle=" + liveTitle
 				+ ", totalViewer=" + totalViewer + ", liveType=" + liveType + ", firPlayerId=" + firPlayerId
 				+ ", secPlayerId=" + secPlayerId + ", liveStatus=" + liveStatus + "]";
 	}

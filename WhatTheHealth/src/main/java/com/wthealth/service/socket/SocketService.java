@@ -11,10 +11,10 @@ public interface SocketService {
 	public void addLiveStream(Socket socket) throws Exception;
 		
 	//SELECT ONE
-	public Socket getLiveStream(int liveNo) throws Exception;
+	public Socket getLiveStream(int socketNo) throws Exception;
 		
 	//DELETE LiveStream -> (주의) Update 해야 함
-	public void deleteLiveStream(int liveNo) throws Exception;	
+	public void deleteLiveStream(int socketNo) throws Exception;	
 		
 	//SELECT LIST
 	public Map<String, Object> listLiveStream(Search search) throws Exception;
