@@ -41,13 +41,22 @@ public class AdminManageDaoImpl implements AdminManageDao {
 
 	@Override
 	public void updateUserAdminManage(User user) throws Exception {
-		sqlSession.update("AdminManageMapper.updateAdminManage", user);
-		sqlSession.update("AdminManageMapper.updateAdminManage", user);
+		sqlSession.update("AdminManageMapper.updateUserAdminManage", user);
 	}
 
 	@Override
-	public int getTotalCount(Search search) throws Exception {
-		return sqlSession.selectOne("AdminManageMapper.getTotalCount", search);
+	public int getUserTotalCount(Search search) throws Exception {
+		return sqlSession.selectOne("AdminManageMapper.getUserTotalCount", search);
+	}
+
+	@Override
+	public List<Point> listPointAdminManage(Search search) throws Exception {
+		return sqlSession.selectList("AdminManageMapper.listPointAdminManage", search);
+	}
+
+	@Override
+	public int getPointTotalCount(Search search) throws Exception {
+		return sqlSession.selectOne("AdminManageMapper.getPointTotalCount", search);
 	}
 
 	
