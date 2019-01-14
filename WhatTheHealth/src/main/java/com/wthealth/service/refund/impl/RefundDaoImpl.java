@@ -27,38 +27,39 @@ public class RefundDaoImpl implements RefundDao {
 
 	@Override
 	public void addRefund(Refund refund) throws Exception {
-		// TODO Auto-generated method stub
+		sqlSession.selectOne("RefundMapper.addRefund", refund);
 	}
 
 	@Override
-	public List<Refund> listRefund(int refundNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Refund> listRefund(Search search) throws Exception {
+		System.out.println("search : " + search);
+		System.out.println("listRefund : " + sqlSession.selectList("RefundMapper.listRefund", search));
+
+		return sqlSession.selectList("RefundMapper.listRefund", search);
 	}
 	
 	@Override
 	public Refund getRefund(int refundNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectOne("RefundMapper.getRefund", refundNo);
 	}
 	
 	
 	@Override
 	public void updateRefund(Refund refund) throws Exception {
-		// TODO Auto-generated method stub
-		
+		sqlSession.update("refundMapper.updateRefund", refund);
 	}
 
 	@Override
-	public List<Refund> listRefundAdmin(int refundNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Refund> listRefundAdmin(Search search) throws Exception {
+		System.out.println("search : " + search);
+		System.out.println("listRefundAdmin : " + sqlSession.selectList("RefundMapper.listRefundAdmin", search));
+
+		return sqlSession.selectList("RefundMapper.listRefundAdmin", search);
 	}
 
 	@Override
 	public int getTotalCount(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.selectOne("RefundMapper.getTotalCount", search);
 	}
 
 

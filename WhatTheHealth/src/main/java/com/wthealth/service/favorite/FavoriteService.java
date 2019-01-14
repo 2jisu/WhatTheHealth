@@ -1,16 +1,28 @@
 package com.wthealth.service.favorite;
 
-import com.wthealth.domain.Interest;
-import com.wthealth.domain.Like;
+import java.util.List;
+import java.util.Map;
+
+import com.wthealth.common.Search;
+import com.wthealth.domain.Favorite;
+import com.wthealth.domain.Post;
+import com.wthealth.domain.Refund;
+import com.wthealth.domain.User;
 
 public interface FavoriteService {
 	
-	public void addLike(Like like) throws Exception;
+	public Favorite addLike(Favorite like) throws Exception;
 
-	public void addInterest(Interest interest) throws Exception;
+	public Favorite addInterest(Favorite interest) throws Exception;
 
-	public void deleteLike(int likeNo) throws Exception;
+	public void deleteLike(int favoriteNo) throws Exception;
 
-	public void deleteInterest(int interestNo) throws Exception;
+	public void deleteInterest(int favoriteNo) throws Exception;
+	
+	public  Map<String, Object> listLikePeople(Search search,String postNo) throws Exception;
+	
+	public Map<String, Object> listMyInterest(Search search, String userId) throws Exception;
+	
+	public void updateLikeCount(String postNo) throws Exception;
 	
 }
