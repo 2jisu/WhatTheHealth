@@ -1,14 +1,20 @@
 package com.wthealth.service.meeting;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wthealth.common.Search;
 import com.wthealth.domain.Join;
 import com.wthealth.domain.Meeting;
+import com.wthealth.domain.Post;
 
 public interface MeetingDao {
 	//INSERT 소모임
 	public void addMeeting(Meeting meeting) throws Exception;
+	
+	//INSERT 소모임 to 게시물 table
+	//public void addMeeingPost(Post post) throws Exception;
+	public void addMeetingPost(Post post) throws Exception;
 	
 	//UPDATE 소모임
 	//public void updateMeeting(Meeting meeting) throws Exception;
@@ -18,6 +24,9 @@ public interface MeetingDao {
 	
 	//SELECT ONE 소모임
 	public Meeting getMeeting(String postNo) throws Exception;
+	
+	//SELECT ONE 소모임 from 게시물 table
+	public Post getMeetingPost(String postNo) throws Exception;
 	
 	//SELECT LIST 소모임
 	public List<Meeting> listMeeting(Search search) throws Exception;
@@ -38,7 +47,7 @@ public interface MeetingDao {
 	public int getTotalCountJoin(String partyId) throws Exception;
 	
 	//SELECT ONE 소모임참여(소모임 알림)
-	public Meeting getJoin(int joinNo) throws Exception;
+	public Join getJoin(int joinNo) throws Exception;
 	
 	//선금 상태 변경
 	public void updateDeposit(int joinNo) throws Exception;

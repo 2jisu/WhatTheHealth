@@ -22,13 +22,13 @@ public interface ReplyDao {
 	//public void deleteReReply(int replyNo) throws Exception;
 	
 	// 게시판 Page 처리를 위한 전체Row(totalCount)  return
-	public int getTotalCount(Search search) throws Exception ;
+	public int getTotalCount(String postNo) throws Exception ;
 	
 	// 게시판 Page 처리를 위한 전체Row(totalCount)  return -> My List
-	public int getTotalCountMyList(String writerId) throws Exception ;
+	public int getTotalCountMyReply(String writerId) throws Exception ;
 	
 	//SELECT LIST
-	public List<Reply> listReply(Search search) throws Exception;
+	public List<Reply> listReply(Search search, String postNo) throws Exception;
 	
 	//SELECT LIST MY REPLY 
 	public List<Reply> listMyReply(Search search, String writerId) throws Exception;

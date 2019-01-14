@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DietScMapper">
+ 	
+ 	
+	<resultMap id="dietScSelectMap" type="com.wthealth.domain.DietSchedule">
+		<result property="dietScNo" 			column="DIET_SC_NO" 			jdbcType="NUMERIC"/>
+		<result property="userId"				column="USER_ID" 			jdbcType="VARCHAR" />
+		<result property="dietScDate" 		column="DIET_SC_DATE" 					jdbcType="DATE" />
+		<result property="mealTime" 		column="MEAL_TIME" 					jdbcType="VARCHAR" />
+		<result property="bmi" 				column="BMI_VALUE" 					jdbcType="NUMERIC" />
+		<result property="weight" 			column="WEIGHT" 			jdbcType="NUMERIC" />		
+	</resultMap>
+	
+	<resultMap id="foodSelectMap" type="com.wthealth.domain.Food">
+		<result property="foodName" 			column="food_name" 			jdbcType="VARCHAR"/>
+		<result property="foodCalorie"			column="food_calorie" 			jdbcType="NUMERIC" />
+		<result property="amountFood" 			column="amount_food" 			jdbcType="NUMERIC" />
+		<result property="dietScNo" 				column="diet_sc_no" 			jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<!-- SQL : INSERT DIET_SC -->
+	<insert 	id="addDietSchedule"		parameterType="com.wthealth.domain.DietSchedule" >
+	 	INSERT
+		INTO diet_sc( diet_sc_no , user_id , diet_sc_date , meal_time , bmi_value, weight, delete_status) 
+		VALUES	 (	seq_diet_sc_diet_sc_no.NEXTVAL , #{userId} , #{dietScDate}, #{mealTime}, #{bmi} , #{weight},'0' )
+	 </insert>
+	 <!-- SQL : INSERT MEAL-->
+	 <insert 	id="addMeal"		parameterType="com.wthealth.domain.Food" >
+	 	INSERT
+		INTO food( meal_no, diet_sc_no, food_name, food_calorie, amount_food) 
+		VALUES	 (seq_meal_meal_no.NEXTVAL , #{dietScNo} , #{foodName}, #{foodCalorie}, #{amountFood} )
+	 </insert>
+	 
+	 <!-- SQL : SELECT  -->
+	 <select 	id="getDietSchedule"	 parameterType="int"	 resultMap="dietScSelectMap">
+		SELECT
+		m.food_name, m.food_claorie, m.amount_food, d.bmi_value, d.weight
+		FROM meal m, diet_sc d 
+		WHERE m.diet_sc_no = d.diet_sc_no AND d.mealTime= #{mealTime} AND m.diet_sc_no = #{diet_sc_no}
+	 </select>
+	 
+	 <!-- SQL : DELETE -->
+	 <delete	id="deleteMeal"	parameterType="com.wthealth.domain.User" >
+	   	DELETE
+	   	FROM meal
+	   	WHERE diet_sc_no = #{diet_sc_no}
+	 </delete>
+		 
+	<!-- SQL : SELECT LIST 도형이꺼봐야지 -->
+	<select  id="listSchedule"  resultMap="dietScSelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(	SELECT user_id , user_name , email
+											FROM users				
+										 				user_name = #{searchKeyword}
+											ORDER BY user_id ) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+	 </select>
+	 	
+</mapper>
