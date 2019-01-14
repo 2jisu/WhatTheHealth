@@ -1,10 +1,10 @@
 package com.wthealth.service.point;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wthealth.common.Search;
 import com.wthealth.domain.Point;
-import com.wthealth.domain.User;
 
 
 public interface PointDao {
@@ -23,5 +23,13 @@ public interface PointDao {
 		
 		// 게시판 Page 처리를 위한 전체Row(totalCount)  return
 		public int getTotalCount(String senderId) throws Exception ;
+		
+		public String getKakaoPayReady(String token, int point) throws Exception;
+		
+		public String getKakaoPayReady(int point) throws Exception;
+		
+		public Map<String, Object> getKakaoPayApprove(String token, String pgToken) throws Exception;
+		
+		public Map<String, Object> getKakaoPayApprove(String pgToken) throws Exception;
 		
 }
