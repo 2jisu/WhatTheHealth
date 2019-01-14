@@ -39,7 +39,7 @@
 		#{photo:VARCHAR}, #{video:VARCHAR}, 0, '0', '0', 0, #{category:VARCHAR}, SYSDATE,
 		#{dietScNo:NUMERIC}, #{locationTagName:VARCHAR}, #{xCoordinate:NUMERIC}, #{yCoordinate:NUMERIC}, #{address:VARCHAR})
 		 <selectKey resultType="String" keyProperty = "postNo" order="AFTER">
-         SELECT 'DC'||seq_post_post_no.nextval FROM dual
+         SELECT 'DC'||seq_dietcom_dietcom_no FROM dual
      	</selectKey>
 	</insert>
 
