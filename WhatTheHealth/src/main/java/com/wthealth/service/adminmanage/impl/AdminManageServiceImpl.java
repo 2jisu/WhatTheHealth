@@ -1,5 +1,6 @@
 package com.wthealth.service.adminmanage.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,20 +32,46 @@ public class AdminManageServiceImpl implements AdminManageService {
 	}
 	
 	@Override
-	public List<User> listUserAdminManage(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> listUserAdminManage(Search search) throws Exception {
+
+		List<User> list = adminManageDao.listUserAdminManage(search);
+		int totalCount = adminManageDao.getUserTotalCount(search);
+		
+		System.out.println("serviceImpl totalCount : "+ totalCount);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("totalCount", new Integer(totalCount));
+		
+		return map;
 	}
 
 	@Override
 	public User getAdminManage(String userId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		User user = adminManageDao.getAdminManage(userId);
+		return user;
 	}
 
 	@Override
 	public void updateUserAdminManage(User user) throws Exception {
-		// TODO Auto-generated method stub
+		adminManageDao.updateUserAdminManage(user);
+		
+	}
+
+	@Override
+	public Map<String, Object> listPointAdminManage(Search search) throws Exception {
+		
+		List<Point> list = adminManageDao.listPointAdminManage(search);
+		
+		int totalCount = adminManageDao.getPointTotalCount(search);
+		
+		System.out.println("serviceImpl totalCount : "+ totalCount);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("totalCount", new Integer(totalCount));
+		
+		return map;
 		
 	}
 
