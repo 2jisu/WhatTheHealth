@@ -35,13 +35,13 @@ public class SocketServiceImpl implements SocketService {
 	}
 
 	@Override
-	public Socket getLiveStream(int liveNo) throws Exception {
-		return socketDao.getLiveStream(liveNo);
+	public Socket getLiveStream(int socketNo) throws Exception {
+		return socketDao.getLiveStream(socketNo);
 	}
 
 	@Override
-	public void deleteLiveStream(int liveNo) throws Exception {
-		socketDao.deleteLiveStream(liveNo);
+	public void deleteLiveStream(int socketNo) throws Exception {
+		socketDao.deleteLiveStream(socketNo);
 	}
 
 	@Override

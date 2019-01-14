@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.wthealth.common.Search;
 import com.wthealth.domain.Reply;
 import com.wthealth.service.reply.ReplyService;
 
@@ -34,113 +35,92 @@ public class ReplyServiceTest {
 	@Qualifier("replyServiceImpl")
 	private ReplyService replyService;
 
-	@Test
+	//@Test
 	public void testAddReply() throws Exception {
 		
 		Reply reply = new Reply();
 		
-		reply.setText("호란나비야");
+		reply.setText("추가가 되나요?");
 		reply.setPostNo("ME10000");
-		reply.setWriterId("user1");
+		reply.setWriterId("user2");
+		
 		
 		replyService.addReply(reply);
-		/*product.setProdName("testProductName");
-		product.setProdDetail("testProdDetail");
-		product.setManuDate("2018-10-18");
-		product.setPrice(1000000);
-		product.setFileName("testProductFile");
-		
-		productService.addProduct(product);*/
-		
-		//product = productService.getProduct(product.getProdNo());
-
+		reply = replyService.getReply(reply.getReplyNo());
 		//==> console 확인
 		System.out.println(reply);
 		
 		//==> API 확인
-		Assert.assertEquals("호란나비야", reply.getText());
+		Assert.assertEquals("추가가 되나요?", reply.getText());
+		Assert.assertEquals("ME10000", reply.getPostNo());
+		Assert.assertEquals("user2", reply.getWriterId());
+	}
+	
+	@Test
+	public void testAddReReply() throws Exception {
+		Reply reply = new Reply();
+		
+		reply.setText("추가추가");
+		reply.setPostNo("ME10000");
+		reply.setWriterId("user1");
+		reply.setParentReplyNo(10001);
+		reply.setReReplyNo(1);
+		
+		
+		replyService.addReReply(reply);
+		reply = replyService.getReply(reply.getReplyNo());
+		
+		//==> console 확인
+		System.out.println(reply);
+				
+		//==> API 확인
+		Assert.assertEquals("추가추가", reply.getText());
 		Assert.assertEquals("ME10000", reply.getPostNo());
 		Assert.assertEquals("user1", reply.getWriterId());
+		Assert.assertEquals(10001, reply.getParentReplyNo());
+		Assert.assertEquals(1, reply.getReReplyNo());
 	}
 	
 	//@Test
-/*	public void testGetProduct() throws Exception {
-		
-		Product product = new Product();
-		//==> 필요하다면...
-		//user.setUserId("testUserId");
-		//user.setUserName("testUserName");
-		//user.setPassword("testPasswd");
-		//user.setSsn("1111112222222");
-		//user.setPhone("111-2222-3333");
-		//user.setAddr("경기도");
-		//user.setEmail("test@test.com");
-		
-		product = productService.getProduct(10066);
-
-		//==> console 확인
-		System.out.println(product);
-		
-		//==> API 확인
-		
-		Assert.assertEquals("testProductName", product.getProdName());
-		Assert.assertEquals("testProdDetail", product.getProdDetail());
-		Assert.assertEquals("20181018", product.getManuDate());
-		Assert.assertEquals(1000000, product.getPrice());
-		Assert.assertEquals("testProductFile", product.getFileName());
-
-		Assert.assertNotNull(productService.getProduct(10020));
-		Assert.assertNotNull(productService.getProduct(10021));
-		
-	}
-	
-	//@Test
-	 public void testUpdateUser() throws Exception{
-		 
-		Product product = productService.getProduct(10066);
-		Assert.assertNotNull(product);
-		
-		Assert.assertEquals("testProductName", product.getProdName());
-		Assert.assertEquals("testProdDetail", product.getProdDetail());
-		Assert.assertEquals("20181018", product.getManuDate());
-		Assert.assertEquals(1000000, product.getPrice());
-		Assert.assertEquals("testProductFile", product.getFileName());
-
-		product.setProdName("changeProductName");
-		product.setProdDetail("changeProdDetail");
-		product.setPrice(100);
-		product.setFileName("changeProductFile");
-	
-		productService.updateProduct(product);
-		
-		product = productService.getProduct(10066);
-		Assert.assertNotNull(product);	
-		
-		//==> console 확인
-		System.out.println(product);
+	public void testGetReply() throws Exception {
+		Reply reply = new Reply();
 			
+			
+		reply = replyService.getReply(10005);
+			
+		//==> console 확인
+		System.out.println(reply);
+					
 		//==> API 확인
-		Assert.assertEquals("changeProductName", product.getProdName());
-		Assert.assertEquals("changeProdDetail", product.getProdDetail());
-		Assert.assertEquals("20181018", product.getManuDate());
-		Assert.assertEquals(100, product.getPrice());
-		Assert.assertEquals("changeProductFile", product.getFileName());
-	 }
-	 
-
-	 //==>  주석을 풀고 실행하면....
-	 //@Test
-	 public void testGetProductListAll() throws Exception{
-		 
-	 	Search search = new Search();
+		Assert.assertEquals("란라니야", reply.getText());
+		Assert.assertEquals("ME10000", reply.getPostNo());
+		Assert.assertEquals("user1", reply.getWriterId());
+		Assert.assertEquals(10001, reply.getParentReplyNo());
+		Assert.assertEquals(1, reply.getReReplyNo());
+	}
+	
+	//@Test
+	public void testDeleteReply() throws Exception {
+		Reply reply = replyService.getReply(10007);
+		Assert.assertNotNull(reply);
+		
+		replyService.deleteReply(10007);
+		reply = replyService.getReply(10007);
+		Assert.assertEquals("1", reply.getDeleteStatus());
+	}
+	
+	//@Test
+	public void testListReply() throws Exception {
+		Search search = new Search();
 	 	search.setCurrentPage(1);
 	 	search.setPageSize(3);
-	 	Map<String,Object> map = productService.getProductList(search);
+	 	
+	 	Map<String,Object> map = replyService.listReply(search, "ME10000");
 	 	
 	 	List<Object> list = (List<Object>)map.get("list");
 	 	Assert.assertEquals(3, list.size());
 	 	
-		//==> console 확인
+	 	//==> console 확인
 	 	System.out.println(list);
 	 	
 	 	Integer totalCount = (Integer)map.get("totalCount");
@@ -148,7 +128,7 @@ public class ReplyServiceTest {
 	 	
 	 	System.out.println("=======================================");
 	 	
-	 	search.setCurrentPage(1);
+	 	/*search.setCurrentPage(1);
 	 	search.setPageSize(3);
 	 	search.setSearchCondition("0");
 	 	search.setSearchKeyword("");
@@ -161,113 +141,43 @@ public class ReplyServiceTest {
 	 	System.out.println("product list all 리스트 : "+list);
 	 	
 	 	totalCount = (Integer)map.get("totalCount");
-	 	System.out.println("product list all 3개 당 리스트 갯수 : "+totalCount);
-	 }
-	 
+	 	System.out.println("product list all 3개 당 리스트 갯수 : "+totalCount);*/
+	}
+	
 	//@Test
-		 public void testGetProductListByProductN0() throws Exception{
-			 
-		 	Search search = new Search();
-		 	search.setCurrentPage(1);
-		 	search.setPageSize(3);
-		 	search.setSearchCondition("0");
-		 	search.setSearchKeyword("10042");
-		 	Map<String,Object> map = productService.getProductList(search);
-		 	
-		 	List<Object> list = (List<Object>)map.get("list");
-		 	Assert.assertEquals(1, list.size());
-		 	
-			//==> console 확인
-		 	System.out.println(list);
-		 	
-		 	Integer totalCount = (Integer)map.get("totalCount");
-		 	System.out.println(totalCount);
-		 	
-		 	System.out.println("=======================================");
-		 	
-		 	//search.setSearchCondition("1");
-		 	//search.setSearchKeyword("상품");	//현재시간 왜 입력?
-		 	//map = productService.getProductList(search);
-		 	
-		 	//list = (List<Object>)map.get("list");
-		 	//Assert.assertEquals(3, list.size());
-		 	
-			//==> console 확인
-		 	//System.out.println(list);
-		 	
-		 	//totalCount = (Integer)map.get("totalCount");
-		 	//System.out.println(totalCount);
-		 }
-	 
-	 @Test
-	 public void testGetProductListByProductName() throws Exception{
-		 
-	 	Search search = new Search();
+	public void testListMyReply() throws Exception {
+		Search search = new Search();
 	 	search.setCurrentPage(1);
 	 	search.setPageSize(3);
-	 	search.setSearchCondition("1");
-	 	search.setSearchKeyword("토끼");
-	 	search.setSearchPriceCondition("1");
-	 	Map<String,Object> map = productService.getProductList(search);
+	 	
+	 	Map<String,Object> map = replyService.listMyReply(search, "user2");
 	 	
 	 	List<Object> list = (List<Object>)map.get("list");
-	 	//Assert.assertEquals(1, list.size());
-	 	
-		//==> console 확인
+	 	//==> console 확인
 	 	System.out.println(list);
+	 	Assert.assertEquals(2, list.size());
+	 	
+	 	
 	 	
 	 	Integer totalCount = (Integer)map.get("totalCount");
-	 	System.out.println(totalCount);
+	 	System.out.println("product list all 토탈카운드 : "+totalCount);
 	 	
 	 	System.out.println("=======================================");
 	 	
+	 	/*search.setCurrentPage(1);
+	 	search.setPageSize(3);
 	 	search.setSearchCondition("0");
-	 	search.setSearchKeyword(""+System.currentTimeMillis());	//현재시간 왜 입력?
+	 	search.setSearchKeyword("");
 	 	map = productService.getProductList(search);
 	 	
 	 	list = (List<Object>)map.get("list");
-	 	Assert.assertEquals(0, list.size());
+	 	Assert.assertEquals(3, list.size()); */
 	 	
-		//==> console 확인
-	 	System.out.println(list);
+	 	//==> console 확인
+	 	System.out.println("purchase list all 리스트 : "+list);
 	 	
-	 	totalCount = (Integer)map.get("totalCount");
-	 	System.out.println(totalCount);
-	 }
-	 
-	 //@Test
-	 public void testGetProductListByPrice() throws Exception{
-		 
-	 	Search search = new Search();
-	 	search.setCurrentPage(1);
-	 	search.setPageSize(3);
-	 	search.setSearchCondition("2");
-	 	search.setSearchKeyword("100");
-	 	Map<String,Object> map = productService.getProductList(search);
-	 	
-	 	List<Object> list = (List<Object>)map.get("list");
-	 	Assert.assertEquals(1, list.size());
-	 	
-		//==> console 확인
-	 	System.out.println(list);
-	 	
-	 	Integer totalCount = (Integer)map.get("totalCount");
-	 	System.out.println(totalCount);
-	 	
-	 	System.out.println("=======================================");
-	 	
-	 	search.setSearchCondition("1");
-	 	search.setSearchKeyword(""+System.currentTimeMillis());
-	 	map = productService.getProductList(search);
-	 	
-	 	list = (List<Object>)map.get("list");
-	 	Assert.assertEquals(0, list.size());
-	 	
-		//==> console 확인
-	 	System.out.println(list);
-	 	
-	 	totalCount = (Integer)map.get("totalCount");
-	 	System.out.println(totalCount);
-	 }	 */
+	 	//totalCount = (Integer)map.get("totalCount");
+	 	System.out.println("purchase list all 3개 당 리스트 갯수 : "+totalCount);
+	}
 	 
 }
