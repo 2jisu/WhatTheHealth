@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.wthealth.domain.ExSchedule;
 import com.wthealth.service.exschedule.ExScheduleDao;
 @Repository("exScheduleDaoImpl")
 public class ExScheduleDaoImpl implements ExScheduleDao {
@@ -24,39 +25,37 @@ public class ExScheduleDaoImpl implements ExScheduleDao {
 
 	///Method
 	@Override
-	public void addExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public int addExSchedule(ExSchedule exSchedule) throws Exception {
+		return sqlSession.insert("ExScMapper.addExSchedule", exSchedule);
+		
 	}
 
 	@Override
-	public void getSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public ExSchedule getExSchedule(int exScNo) throws Exception {
+		return sqlSession.selectOne("ExScMapper.getExSchedule", exScNo);		
 	}
 
 	@Override
-	public void updateExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public int updateExSchedule(ExSchedule exSchedule) throws Exception {
+		return sqlSession.update("ExScMapper.updateExSchedule", exSchedule);
+		
 	}
 
 	@Override
-	public void listExSchedule() throws Exception {
+	public void listExSchedule(String userId) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void getExHistoryChart() throws Exception {
+	public void getExHistoryChart(String userId) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void deleteExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public void deleteExSchedule(int exScNo) throws Exception {
+		sqlSession.update("ExScMapper.deleteExSchedule", exScNo);		
 	}
 
 }

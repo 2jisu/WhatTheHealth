@@ -6,9 +6,12 @@ public class Claim {
 	private String userId;
 	private String claimedUserId;
 	private String claimDate;
-	private int claimSortNo;
+	private String claimSortNo;
 	private String claimStatus;
-	private String postNo;
+	private String claimReasonNo;
+	private String targetNo;
+	private String claimContents;
+
 
 	public Claim(){
 	}
@@ -45,11 +48,11 @@ public class Claim {
 		this.claimDate = claimDate;
 	}
 
-	public int getClaimSortNo() {
+	public String getClaimSortNo() {
 		return claimSortNo;
 	}
 
-	public void setClaimSortNo(int claimSortNo) {
+	public void setClaimSortNo(String claimSortNo) {
 		this.claimSortNo = claimSortNo;
 	}
 
@@ -61,12 +64,35 @@ public class Claim {
 		this.claimStatus = claimStatus;
 	}
 
-	public String getPostNo() {
-		return postNo;
+	public String getClaimReasonNo() {
+		return claimReasonNo;
 	}
 
-	public void setPostNo(String postNo) {
-		this.postNo = postNo;
+	public void setClaimReasonNo(String claimReasonNo) {
+		this.claimReasonNo = claimReasonNo;
 	}
+
+	public String getTargetNo() {
+		return targetNo;
+	}
+
+	public void setTargetNo(String targetNo) {
+		this.targetNo = targetNo;
+	}
+
+	public String getClaimContents() {
+		return claimContents;
+	}
+
+	public void setClaimContents(String claimContents) {
+		this.claimContents = claimContents;
+	} 
+
+	@Override
+	public String toString() {
+		return "Claim [claimNo=" + claimNo + ", userId=" + userId + ", claimedUserId=" + claimedUserId + ", claimDate="
+				+ claimDate + ", claimSortNo=" + claimSortNo + ", claimStatus=" + claimStatus + ", claimReasonNo="
+				+ claimReasonNo + ", targetNo=" + targetNo + ", claimContents=" + claimContents + "]";
+	}	
 	
 }
