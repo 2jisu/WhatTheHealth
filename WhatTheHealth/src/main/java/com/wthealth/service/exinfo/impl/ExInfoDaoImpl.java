@@ -1,5 +1,6 @@
 package com.wthealth.service.exinfo.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -26,38 +27,50 @@ public class ExInfoDaoImpl implements ExInfoDao{
 	public ExInfoDaoImpl() {
 		System.out.println(this.getClass());
 	}
-	//@Override
-	public void addExInfo(Post post) throws Exception {
-		sqlSession.insert("ExInfoMapper.addPost", post);
-	//	int postNo = post.getPostNo();
+	@Override
+	public int addExInfo(Post post) throws Exception {		
+		return sqlSession.insert("ExInfoMapper.addExInfo", post);
 	}
 
 	@Override
-	public Post getExInfo(int exInfoNo) throws Exception {
-		return sqlSession.selectOne("ExInfoMapper.getExInfo", exInfoNo);
+	public void addPost(Post post) throws Exception{
+		sqlSession.insert("ExInfoMapper.addPost", post);
+	}
+	
+	@Override
+	public Post getExInfo(String postNo) throws Exception {
+		return sqlSession.selectOne("ExInfoMapper.getExInfo", postNo);
 	}
 
-	//@Override
+	@Override
 	public void updateExInfo(Post post) throws Exception {
-		sqlSession.update("ExInfoMapper.updateExinfo", post);
+		sqlSession.update("ExInfoMapper.updateExInfo", post);
+	}
+
+	@Override
+	public void updatePost(Post post) throws Exception {
 		sqlSession.update("ExInfoMapper.updatePost", post);
 	}
 
-	//@Override
-	public Map<String, Object> listExInfo(Search search) throws Exception {
-		return null;
+	@Override
+	public List<Post> listExInfo(Search search) throws Exception {
+		return sqlSession.selectList("ExInfoMapper.listExInfoPost", search);
 	}
 
 	//@Override
-	public void deleteExInfo(int postNo) throws Exception {
-		
+	public List<Post> listExInfo(String Weather) throws Exception {
+		return sqlSession.selectList("ExInfoMapper.listExInfoPost", Weather);
 	}
+	@Override
+	public int getTotalCount(Search search) throws Exception{
+		return sqlSession.selectOne("ExInfoMapper.getTotalCount", search);
+	}
+	
 
-	//@Override
-	public Map<String, Object> listExInfo(String Weather) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+
+
+	
 	
 
 }

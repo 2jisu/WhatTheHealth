@@ -1,10 +1,14 @@
 package com.wthealth.service.main;
 
-import java.util.Map;
+import java.util.List;
 
 import com.wthealth.common.Search;
+import com.wthealth.domain.Post;
 
 public interface MainDao {
 
-	public Map<String, Object> listSearchMain(Search search) throws Exception;
+	public List<Post> listSearchMain(Search search) throws Exception;
+
+	public int getTotalCount(Search search) throws Exception;
+	
 }

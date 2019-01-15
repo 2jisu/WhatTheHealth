@@ -13,57 +13,60 @@ import com.wthealth.service.excom.ExComDao;
 
 @Repository("exComDaoImpl")
 public class ExComDaoImpl implements ExComDao {
-	
+
 	@Autowired
 	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
+
 	public void setSqlSession(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
-	
+
 	public ExComDaoImpl() {
 		System.out.println(this.getClass());
 	}
 
 	@Override
 	public void addExCom(Post post) throws Exception {
-		// TODO Auto-generated method stub
+		sqlSession.insert("ExComMapper.addExCom", post);
 	}
 
 	@Override
-	public Post getExCom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Post getExCom(String postNo) throws Exception {
+		return sqlSession.selectOne("ExComMapper.getExCom", postNo);
 	}
 
 	@Override
-	public List<Post> listExCom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Post> listExCom(Search search) throws Exception {
+		System.out.println("search : " + search);
+		System.out.println("listExCom : " + sqlSession.selectList("ExComMapper.listExCom", search));
+
+		return sqlSession.selectList("ExComMapper.listExCom", search);
 	}
 
 	@Override
 	public void updateExCom(Post post) throws Exception {
-		// TODO Auto-generated method stub
+		sqlSession.update("ExComMapper.updateExCom", post);
 
 	}
 
 	@Override
-	public void deleteExCom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
+	public void deleteExCom(String postNo) throws Exception {
+		sqlSession.update("ExComMapper.deleteExCom", postNo);
 
 	}
 
 	@Override
-	public List<Post> listExComRecom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Post> listExComRecom(Search search) throws Exception {
+		System.out.println("search : " + search);
+		System.out.println("listExComRecom : " + sqlSession.selectList("ExComMapper.listExComRecom", search));
+
+		return sqlSession.selectList("ExComMapper.listExComRecom", search);
 	}
 
 	@Override
 	public int getTotalCount(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.selectOne("ExComMapper.getTotalCount", search);
 	}
 
 }
