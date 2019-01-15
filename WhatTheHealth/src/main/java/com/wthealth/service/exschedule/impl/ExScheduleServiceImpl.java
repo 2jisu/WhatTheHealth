@@ -1,9 +1,12 @@
 package com.wthealth.service.exschedule.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.wthealth.domain.ExSchedule;
 import com.wthealth.service.exschedule.ExScheduleDao;
 import com.wthealth.service.exschedule.ExScheduleService;
 
@@ -14,7 +17,7 @@ public class ExScheduleServiceImpl implements ExScheduleService {
 	@Autowired
 	@Qualifier("exScheduleDaoImpl")
 	private ExScheduleDao exScheduleDao;
-	
+	 
 	
 	///Constructor
 	public void setExScheduleDao(ExScheduleDao exScheduleDao) {
@@ -27,39 +30,37 @@ public class ExScheduleServiceImpl implements ExScheduleService {
 
 	///Method
 	@Override
-	public void addExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public int addExSchedule(ExSchedule exSchedule) throws Exception {
+		return exScheduleDao.addExSchedule(exSchedule);		
 	}
 
 	@Override
-	public void getSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public ExSchedule getExSchedule(int exScNo) throws Exception {
+		return exScheduleDao.getExSchedule(exScNo);		
 	}
 
 	@Override
-	public void updateExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public int updateExSchedule(ExSchedule exSchedule) throws Exception {
+		return exScheduleDao.updateExSchedule(exSchedule);
+		
 	}
 
 	@Override
-	public void listExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public List<ExSchedule> listExSchedule(String userId) throws Exception {
+		return null;
+		
 	}
 
 	@Override
-	public void getExHistoryChart() throws Exception {
+	public void getExHistoryChart(String userId) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void deleteExSchedule() throws Exception {
-		// TODO Auto-generated method stub
-
+	public void deleteExSchedule(int exScNo) throws Exception {
+		exScheduleDao.deleteExSchedule(exScNo);
+		
 	}
 
 }

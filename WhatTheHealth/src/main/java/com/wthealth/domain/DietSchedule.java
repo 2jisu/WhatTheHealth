@@ -13,6 +13,7 @@ public class DietSchedule {
 	private int dietScCalorie;
 	private String mealTime;
 	private int weight;
+	private String deleteStatus;
 	/**
 	 * 
 	 */
@@ -65,6 +66,12 @@ public class DietSchedule {
 	}
 	public void setWeight(int weight) {
 		this.weight = weight;
+	}
+	public String getDeleteStatus() {
+		return deleteStatus;
+	}
+	public void setDeleteStatus(String deleteStatus) {
+		this.deleteStatus = deleteStatus;
 	}
 	@Override
 	public String toString() {
