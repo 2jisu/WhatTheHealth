@@ -32,9 +32,10 @@ DROP SEQUENCE seq_socket_socket_no;
 DROP SEQUENCE seq_socekt_socket_no;
 DROP SEQUENCE seq_meeting_meeting_no;
 DROP SEQUENCE seq_users_user_id;
+DROP SEQUENCE seq_dietcom_dietcom_no;
+DROP SEQUENCE seq_excom_excom_no;
 
 CREATE SEQUENCE seq_point_point_no	INCREMENT BY 1 START WITH 10000;
-CREATE SEQUENCE seq_post_post_no		INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_hashtag_hashtag_no		INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_claim_claim_no		INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_diet_sc_diet_sc_no		INCREMENT BY 1 START WITH 10000;
@@ -47,6 +48,9 @@ CREATE SEQUENCE seq_reply_reply_no		INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_meeting_meet_no		INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_join_join_no		INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_socket_socket_no		INCREMENT BY 1 START WITH 10000;
+CREATE SEQUENCE seq_dietcom_dietcom_no		INCREMENT BY 1 START WITH 10000;
+CREATE SEQUENCE seq_excom_excom_no		INCREMENT BY 1 START WITH 10000;
+
 
 CREATE TABLE users ( 
 	user_id 		VARCHAR2(20)	NOT NULL,
@@ -101,12 +105,17 @@ CREATE TABLE post (
 	diet_sc_no	NUMBER(10),
 	ex_sc_no	NUMBER(10),
 	address 	VARCHAR2(100),
+	ex_info_no 	NUMBER,
+	ex_calorie	NUMBER(5),
+	ex_place	VARCHAR2(3),
+	ex_part		VARCHAR2(3),
+	ex_videotime	VARCHAR2(20),	
 	PRIMARY KEY(post_no)
 );
 
 CREATE TABLE hashtag ( 
 	hashtag_no NUMBER NOT NULL,
-	hashtag VARCHAR2(20) NOT NULL,
+	hashtag 	VARCHAR2(50) NOT NULL,
 	post_no		VARCHAR2(10)	NOT NULL 	REFERENCES POST(post_no),
 	PRIMARY KEY(hashtag_no)
 );
@@ -148,7 +157,7 @@ CREATE TABLE MEAL(
 CREATE TABLE EX_SC( 
 	ex_sc_no NUMBER NOT NULL,
 	user_id VARCHAR2(20) NOT NULL REFERENCES users(user_id),
-	ex_sc_title VARCHAR2(20) NOT NULL,
+	ex_sc_title VARCHAR2(100) NOT NULL,
 	ex_sc_contents VARCHAR2(500) NOT NULL,
 	ex_sc_calorie NUMBER(5),
 	ex_sc_date DATE,
@@ -179,15 +188,7 @@ CREATE TABLE REFUND(
 	PRIMARY KEY(refund_no)
 );
 
-CREATE TABLE ex_info ( 
-	ex_info_no 			NUMBER				NOT NULL,
-	post_no 		    VARCHAR2(50)		NOT NULL   REFERENCES  post(post_no),
-	ex_calorie			NUMBER(5)			NOT NULL,
-	ex_place			VARCHAR2(3)			NOT NULL,
-	ex_part				VARCHAR2(3)			NOT NULL,
-	ex_videotime		VARCHAR2(20)		NOT NULL,	
-	PRIMARY KEY(ex_info_no)	
-);
+
 
 CREATE TABLE reply (
 	reply_no	NUMBER	NOT NULL,
@@ -195,7 +196,7 @@ CREATE TABLE reply (
 	rereply_no	NUMBER(3)	DEFAULT '0',
 	reply_date	DATE	NOT NULL,
 	post_no	VARCHAR2(10)	NOT NULL	REFERENCES post(post_no),
-	text	VARCHAR2(200)	NOT NULL,
+	text	VARCHAR2(500)	NOT NULL,
 	writer_id	VARCHAR2(20)	NOT NULL	REFERENCES users(user_id),
 	blind_status	VARCHAR2(3),
 	delete_status	VARCHAR2(3),
@@ -204,7 +205,7 @@ CREATE TABLE reply (
 
 CREATE TABLE meeting (
 	meet_no	NUMBER	NOT NULL,
-	post_no	VARCHAR2(10)	NOT NULL	REFERENCES post(post_no),
+	post_no	VARCHAR2(10)	NOT NULL,
 	depo_amount	NUMBER(10),
 	depo_bank	VARCHAR2(20),
 	depo_account	VARCHAR2(30),

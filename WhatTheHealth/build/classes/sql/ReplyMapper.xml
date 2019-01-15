@@ -20,19 +20,25 @@
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addReply"		parameterType="com.wthealth.domain.Reply" >
+	<insert 	id="addReply"		parameterType="com.wthealth.domain.Reply" useGeneratedKeys="true" keyProperty="replyNo" >
 	 	INSERT
 		INTO reply ( reply_no , rereply_no , reply_date , post_no, text, writer_id, blind_status , delete_status) 
 		VALUES	 (	seq_reply_reply_no.nextval, '0', SYSDATE, #{postNo} , 
 							#{text} , #{writerId} , #{blindStatus:VARCHAR} , #{deleteStatus:VARCHAR})
-	 </insert>
+		<selectKey resultType="int" keyProperty = "replyNo" order="AFTER">
+			SELECT seq_reply_reply_no.currval FROM dual
+		</selectKey>
+	</insert>
 	 
 	 <!-- SQL : INSERT -->
-	<insert 	id="addReReply"		parameterType="com.wthealth.domain.Reply" >
+	<insert 	id="addReReply"		parameterType="com.wthealth.domain.Reply"  useGeneratedKeys="true" keyProperty="replyNo" >
 	 	INSERT
 		INTO reply ( reply_no , parent_reply_no , rereply_no , reply_date , post_no, text, writer_id, blind_status , delete_status) 
-		VALUES	 (	seq_reply_reply_no.nextval, #{parentReplyNo:NUMERIC} , #{reReplyNo} , #{replyDate} , #{postNo} , 
+		VALUES	 (	seq_reply_reply_no.nextval, #{parentReplyNo:NUMERIC} , #{reReplyNo} , SYSDATE, #{postNo} , 
 							#{text} , #{writerId} , #{blindStatus:VARCHAR} , #{deleteStatus:VARCHAR})
+		<selectKey resultType="int" keyProperty = "replyNo" order="AFTER">
+			SELECT seq_reply_reply_no.currval FROM dual
+		</selectKey>
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
@@ -62,14 +68,15 @@
 	 </update> -->
 		 
 	<!-- SQL : SELECT LIST -->
-	<select  id="listReply"  parameterType="com.wthealth.common.Search"	resultMap="replySelectMap">
+	<select  id="listReply"  parameterType="map"	resultMap="replySelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
 	  					FROM		(	SELECT reply_no , parent_reply_no , rereply_no , reply_date , post_no, text, writer_id, blind_status , delete_status
 											FROM reply
-											ORDER BY reply_no, rereply_no ) inner_table
-						WHERE ROWNUM &lt;= #{endRowNum} )
-		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+											WHERE post_No = #{postNo}
+									 	) inner_table
+						WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
 	 </select>
 	 
 	 <!-- SQL : SELECT LIST -->
@@ -78,9 +85,11 @@
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
 	  					FROM		(	SELECT reply_no , parent_reply_no , rereply_no , reply_date , post_no, text, writer_id, blind_status , delete_status
 											FROM reply
+											WHERE writer_id = #{writerId}
+											ORDER BY reply_no DESC
 											 ) inner_table
-						WHERE ROWNUM &lt;= #{endRowNum} )
-		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+						WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
 	 </select>
 	 	<!--  위 두번째 subQuery 의  
 	 			WHERE ROWNUM &lt;= #{endRowNum} ) 는
@@ -94,10 +103,11 @@
 		-->
 	
 	<!-- SQL : SELECT ROW Count -->	 
-	 <select  id="getTotalCount"  parameterType="com.wthealth.common.Search"	 resultType="int">
+	 <select  id="getTotalCount"  parameterType="String"	 resultType="int">
 	  	SELECT COUNT(*)
 	  	FROM(	SELECT reply_no , parent_reply_no , rereply_no , reply_date , post_no, text, writer_id, blind_status , delete_status
 						FROM reply
+						WHERE post_No = #{value}
 					 ) countTable						
 	 </select>
 	 
@@ -106,6 +116,7 @@
 	  	SELECT COUNT(*)
 	  	FROM(	SELECT reply_no , parent_reply_no , rereply_no , reply_date , post_no, text, writer_id, blind_status , delete_status
 						FROM reply
+						WHERE writer_id = #{value}
 					 ) countTable						
 	 </select>
 	 
