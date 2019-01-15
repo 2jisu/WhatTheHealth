@@ -1,16 +1,18 @@
 package com.wthealth.service.exschedule;
 
+import com.wthealth.domain.ExSchedule;
+
 public interface ExScheduleDao {
 
-	public void addExSchedule() throws Exception;
+	public int addExSchedule(ExSchedule exSchedule) throws Exception;
 	
-	public void getSchedule() throws Exception;
+	public ExSchedule getExSchedule(int exScNo) throws Exception;
 	
-	public void updateExSchedule() throws Exception; 
+	public int updateExSchedule(ExSchedule exSchedule) throws Exception; 
 	
-	public void listExSchedule() throws Exception;
+	public void listExSchedule(String userId) throws Exception;
 	
-	public void getExHistoryChart() throws Exception;
+	public void getExHistoryChart(String userId) throws Exception;
 	
-	public void deleteExSchedule() throws Exception; 
+	public void deleteExSchedule(int exScNo) throws Exception; 
 }

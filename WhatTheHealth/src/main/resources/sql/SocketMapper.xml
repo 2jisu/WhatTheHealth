@@ -8,7 +8,7 @@
  	
  	
 	<resultMap id="socketSelectMap" type="com.wthealth.domain.Socket">
-		<result property="liveNo" 			column="live_no" 			jdbcType="NUMERIC"/>
+		<result property="socketNo" 			column="socket_no" 			jdbcType="NUMERIC"/>
 		<result property="bjId"			column="bj_id" 		jdbcType="VARCHAR" />
 		<result property="liveDate"		column="live_date" 		jdbcType="DATE" />
 		<result property="liveTitle" 				column="live_title" 					jdbcType="VARCHAR" />
@@ -20,36 +20,49 @@
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addLiveStream"		parameterType="com.wthealth.domain.Socket" >
+	<insert 	id="addLiveStream"		parameterType="com.wthealth.domain.Socket"  useGeneratedKeys="true" keyProperty="socketNo">
 	 	INSERT
-		INTO reply ( live_no , bj_id , live_date , live_title, total_viewer, live_Type, fir_player_id , sec_player_id) 
-		VALUES	 (seq_socket_socket_no.nextval, #{bj_id}, #{live_date}, #{live_title} , 
-							#{total_viewer:NUMERIC} , #{liveType} , #{firPlayerId:VARCHAR} , #{secPlayerId:VARCHAR})
+		INTO socket ( socket_no, bj_id, live_date, live_title, total_viewer, live_type, fir_player_id , sec_player_id, live_status) 
+		VALUES (seq_socket_socket_no.nextval, #{bjId}, SYSDATE, #{liveTitle}, 
+							#{totalViewer:NUMERIC}, #{liveType}, #{firPlayerId:VARCHAR}, #{secPlayerId:VARCHAR}, '1')
+	 	<selectKey resultType="int" keyProperty = "socketNo" order="AFTER">
+			SELECT seq_socket_socket_no.currval FROM dual
+		</selectKey>
+	 
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
 	 <select 	id="getLiveStream"	parameterType="int"	resultMap="socketSelectMap">
 		SELECT
-		live_no , bj_id , live_date , live_title, total_viewer, live_Type, fir_player_id , sec_player_id, live_status
-		FROM live 
-		WHERE live_no = #{value}
+		socket_no , bj_id , live_date , live_title, total_viewer, live_Type, fir_player_id , sec_player_id, live_status
+		FROM socket 
+		WHERE socket_no = #{value}
 	 </select>
 	 
 	 <!-- SQL : UPDATE -->
-	 <update	id="deleteLive"	parameterType="int" >
-	   	UPDATE live
+	 <update id="deleteLiveStream"	parameterType="int" >
+	   	UPDATE socket
 	   	<set>
-	   		live_status = '1'
+	   		live_status = '0'
 	   	</set>
-	   	WHERE live_no = #{value}
+	   	WHERE socket_no = #{value}
 	 </update>
 		 
 	<!-- SQL : SELECT LIST -->
-	<select  id="listReply"  parameterType="com.wthealth.common.Search"	resultMap="socketSelectMap">
+	<select  id="listLiveStream"  parameterType="com.wthealth.common.Search"	resultMap="socketSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT live_no, bj_id, live_title, total_viewer, live_type, fir_player_id, sec_player_id
-											FROM live
+	  					FROM		(	SELECT socket_no, bj_id, live_title, total_viewer, live_type, fir_player_id, sec_player_id, live_status
+											FROM socket
+											<where>
+											 live_status = 1										
+												<if test = "searchCondition == 0 and searchKeyword !='' ">	<!-- 게시자 검색-->
+													and bj_id LIKE '%'||#{searchKeyword}||'%'
+												</if>			
+												<if test = "searchCondition == 1 and searchKeyword !='' ">	<!-- 제목 검색-->
+													and live_title LIKE '%'||#{searchKeyword}||'%'
+												</if>		
+											</where>	
 											ORDER BY live_date ) inner_table
 						WHERE ROWNUM &lt;= #{endRowNum} )
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
@@ -68,8 +81,18 @@
 	<!-- SQL : SELECT ROW Count -->	 
 	 <select  id="getTotalCount"  parameterType="com.wthealth.common.Search"	 resultType="int">
 	  	SELECT COUNT(*)
-	  	FROM(	SELECT live_no, bj_id, live_title, total_viewer, live_type, fir_player_id, sec_player_id
-						FROM live
+	  	FROM(	SELECT socket_no, bj_id, live_title, total_viewer, live_type, fir_player_id, sec_player_id, live_status
+											FROM socket
+											<where>
+											 live_status = 1										
+												<if test = "searchCondition == 0 and searchKeyword !='' ">	<!-- 게시자 검색-->
+													and bj_id LIKE '%'||#{searchKeyword}||'%'
+												</if>			
+												<if test = "searchCondition == 1 and searchKeyword !='' ">	<!-- 제목 검색-->
+													and live_title LIKE '%'||#{searchKeyword}||'%'
+												</if>		
+											</where>	
+											ORDER BY live_date 
 					 ) countTable						
 	 </select>
 	 

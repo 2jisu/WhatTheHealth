@@ -8,10 +8,11 @@ public class ExSchedule {
 	private String userId;
 	private String exScName;
 	private int exScCalorie;
-	private Date exScTime;
+	private String exScTime;
 	private String exScContents;
 	private Date exScDate;
-	private int exCalorie;
+	private String postNo;
+	private String deleteStatus;
 	
 	public ExSchedule() {
 	}
@@ -48,11 +49,11 @@ public class ExSchedule {
 		this.exScCalorie = exScCalorie;
 	}
 
-	public Date getExScTime() {
+	public String getExScTime() {
 		return exScTime;
 	}
 
-	public void setExScTime(Date exScTime) {
+	public void setExScTime(String exScTime) {
 		this.exScTime = exScTime;
 	}
 
@@ -72,14 +73,29 @@ public class ExSchedule {
 		this.exScDate = exScDate;
 	}
 
-	public int getExCalorie() {
-		return exCalorie;
+	public String getPostNo() {
+		return postNo;
 	}
 
-	public void setExCalorie(int exCalorie) {
-		this.exCalorie = exCalorie;
+	public void setPostNo(String postNo) {
+		this.postNo = postNo;
 	}
 	
-	
 
+	public String getDeleteStatus() {
+		return deleteStatus;
+	}
+
+	public void setDeleteStatus(String deleteStatus) {
+		this.deleteStatus = deleteStatus;
+	}
+
+	@Override
+	public String toString() {
+		return "ExSchedule [exScNo=" + exScNo + ", userId=" + userId + ", exScName=" + exScName + ", exScCalorie="
+				+ exScCalorie + ", exScTime=" + exScTime + ", exScContents=" + exScContents + ", exScDate=" + exScDate
+				+ ", postNo=" + postNo + ", deleteStatus=" + deleteStatus + "]";
+	}
+
+	
 }

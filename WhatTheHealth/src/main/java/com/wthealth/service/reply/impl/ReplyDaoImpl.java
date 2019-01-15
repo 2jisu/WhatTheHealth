@@ -57,18 +57,20 @@ public class ReplyDaoImpl implements ReplyDao {
 	}*/
 
 	@Override
-	public int getTotalCount(Search search) throws Exception {
-		return sqlSession.selectOne("ReplyMapper.getTotalCount", search);
+	public int getTotalCount(String postNo) throws Exception {
+		return sqlSession.selectOne("ReplyMapper.getTotalCount", postNo);
 	}
 
 	@Override
-	public List<Reply> listReply(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectList("ReplyMapper.listReply", search);
+	public List<Reply> listReply(Search search, String postNo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("postNo", postNo);
+		return sqlSession.selectList("ReplyMapper.listReply", map);
 	}
 
 	@Override
-	public int getTotalCountMyList(String writerId) throws Exception {
+	public int getTotalCountMyReply(String writerId) throws Exception {
 		return sqlSession.selectOne("ReplyMapper.getTotalCountMyList", writerId);
 	}
 

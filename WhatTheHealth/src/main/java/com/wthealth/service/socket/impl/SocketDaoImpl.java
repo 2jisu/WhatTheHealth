@@ -33,13 +33,13 @@ public class SocketDaoImpl implements SocketDao {
 	}
 
 	@Override
-	public Socket getLiveStream(int liveNo) throws Exception {
-		return sqlSession.selectOne("SocketMapper.getLiveStream", liveNo);
+	public Socket getLiveStream(int socketNo) throws Exception {
+		return sqlSession.selectOne("SocketMapper.getLiveStream", socketNo);
 	}
 
 	@Override
-	public void deleteLiveStream(int liveNo) throws Exception {
-		sqlSession.update("SocketMapper.deleteLiveStream", liveNo);
+	public void deleteLiveStream(int socketNo) throws Exception {
+		sqlSession.update("SocketMapper.deleteLiveStream", socketNo);
 	}
 
 	@Override
