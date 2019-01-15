@@ -27,45 +27,44 @@ public class DietComDaoImpl implements DietComDao {
 	
 	@Override
 	public void addDietCom(Post post) throws Exception {
-		// TODO Auto-generated method stub
+		sqlSession.insert("DietComMapper.addDietCom", post);
+	}
+	
+	@Override
+	public Post getDietCom(String postNo) throws Exception {
+		return sqlSession.selectOne("DietComMapper.getDietCom", postNo);
 	}
 
 	@Override
-	public List<Post> listDietCom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Post> listDietCom(Search search) throws Exception {
+		System.out.println("search : " + search);
+		System.out.println("listExCom : " + sqlSession.selectList("DietComMapper.listDietCom", search));
+
+		return sqlSession.selectList("DietComMapper.listDietCom", search);
 	}
 
 	@Override
 	public void updateDietCom(Post post) throws Exception {
-		// TODO Auto-generated method stub
-
+		sqlSession.update("DietComMapper.updateDietCom", post);
 	}
 
 	@Override
-	public void deleteDietCom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-
+	public void deleteDietCom(String postNo) throws Exception {
+		sqlSession.update("DietComMapper.deleteDietCom", postNo);
 	}
 
 	@Override
-	public List<Post> listDietComRecom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Post> listDietComRecom(Search search) throws Exception {
+		System.out.println("search : " + search);
+		System.out.println("listDietComRecom : " + sqlSession.selectList("DietComMapper.listDietComRecom", search));
+
+		return sqlSession.selectList("DietComMapper.listDietComRecom", search);
 	}
 
 	@Override
 	public int getTotalCount(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.selectOne("DietComMapper.getTotalCount", search);
 	}
 
-	@Override
-	public Post getDietCom(int postNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 
 }

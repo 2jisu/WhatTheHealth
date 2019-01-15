@@ -3,9 +3,9 @@ package com.wthealth.domain;
 public class HashTag {
 	
 	private int hashTagNo;
-	private int hashTag;
-	private int postNo;
-	
+	private String hashTag;
+	private String postNo;
+	 
 	
 	public int getHashTagNo() {
 		return hashTagNo;
@@ -13,16 +13,16 @@ public class HashTag {
 	public void setHashTagNo(int hashTagNo) {
 		this.hashTagNo = hashTagNo;
 	}
-	public int getHashTag() {
+	public String getHashTag() {
 		return hashTag;
 	}
-	public void setHashTag(int hashTag) {
+	public void setHashTag(String hashTag) {
 		this.hashTag = hashTag;
 	}
-	public int getPostNo() {
+	public String getPostNo() {
 		return postNo;
 	}
-	public void setPostNo(int postNo) {
+	public void setPostNo(String postNo) {
 		this.postNo = postNo;
 	}
 	@Override

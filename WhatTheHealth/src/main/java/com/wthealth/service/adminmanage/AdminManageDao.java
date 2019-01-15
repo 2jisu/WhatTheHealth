@@ -14,5 +14,10 @@ public interface AdminManageDao {
 	
 	public void updateUserAdminManage(User user) throws Exception;
 	
-	public int getTotalCount(Search search) throws Exception ; 
+	public int getUserTotalCount(Search search) throws Exception ; 
+	
+	public int getPointTotalCount(Search search) throws Exception ;
+	
+	public List<Point> listPointAdminManage(Search search) throws Exception;
+
 }
