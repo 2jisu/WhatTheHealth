@@ -1,6 +1,13 @@
 package com.wthealth.web.controller.jjbly;
 
+import java.io.File;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wthealth.common.Page;
 import com.wthealth.common.Search;
@@ -18,7 +26,7 @@ import com.wthealth.domain.Post;
 import com.wthealth.service.dietcom.DietComService;
 
 @Controller
-@RequestMapping("/dietcom/*")
+@RequestMapping("/dietCom/*")
 public class DietComController {
 	
 	@Autowired
@@ -40,13 +48,20 @@ public class DietComController {
 		public String addDietCom() throws Exception{
 			System.out.println("addDietCom : GET");
 						 
-			return "redirect:/dietcom/addDietCom.jsp";
+			Post dietCom = new Post();
+			dietCom.setTitle("Å×½ºÆ®");
+			dietCom.setUserId("user1");
+			//dietCom.setPostNo("DC9999");
+			//dietCom.setContents("???");
+			return "forward:/dietcom/addDietCom.jsp";
 		}
 		
 		@RequestMapping(value = "addDietCom", method = RequestMethod.POST)
-		public String addDietCom(@ModelAttribute("post") Post post) throws Exception{
+		public String addDietCom(@ModelAttribute("post") Post post, @RequestParam("file") MultipartFile file, 
+				HttpServletRequest request, HttpServletResponse response) throws Exception{
 			System.out.println("/addDietCom : POST");
 			
+			dietComService.profileUpload(file, request, response);
 			dietComService.addDietCom(post);
 			
 			return "forward:/dietcom/getDietCom?postNo"+post.getPostNo();
