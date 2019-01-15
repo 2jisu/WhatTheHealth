@@ -35,7 +35,7 @@
 		<mapper resource="sql/ExScMapper.xml"/>
 		<mapper resource="sql/HashTagMapper.xml"/>
 		<!-- 동환 -->
-		<!-- <mapper resource="sql/AdminManageMapper.xml"/> -->
+		<mapper resource="sql/AdminManageMapper.xml"/>
 		<mapper resource="sql/ExInfoMapper.xml"/>
 		<mapper resource="sql/MainMapper.xml"/>
 		<!-- 호란-->
