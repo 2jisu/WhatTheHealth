@@ -21,10 +21,6 @@ import com.wthealth.service.excom.ExComService;
 @RequestMapping("/excom/*")
 public class ExComController {
 	
-	public ExComController() {
-		System.out.println(this.getClass());
-	}
-	
 	@Autowired
 	@Qualifier("exComServiceImpl")
 	private ExComService exComService;
@@ -34,6 +30,10 @@ public class ExComController {
 	
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
+	
+	public ExComController() {
+		System.out.println(this.getClass());
+	}
 	
 	@RequestMapping(value = "addExCom", method = RequestMethod.GET)
 	public String addExCom() throws Exception{
