@@ -1,13 +1,17 @@
 package com.wthealth.web.controller.jjbly;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sound.midi.Synthesizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,23 +53,26 @@ public class DietComController {
 			System.out.println("addDietCom : GET");
 						 
 			Post dietCom = new Post();
-			dietCom.setTitle("Å×½ºÆ®");
 			dietCom.setUserId("user1");
-			//dietCom.setPostNo("DC9999");
-			//dietCom.setContents("???");
+			
 			return "forward:/dietcom/addDietCom.jsp";
 		}
 		
 		@RequestMapping(value = "addDietCom", method = RequestMethod.POST)
-		public String addDietCom(@ModelAttribute("post") Post post, @RequestParam("file") MultipartFile file, 
-				HttpServletRequest request, HttpServletResponse response) throws Exception{
+		public String addDietCom(@ModelAttribute("post") Post post, HttpSession session) throws Exception{
 			System.out.println("/addDietCom : POST");
 			
-			dietComService.profileUpload(file, request, response);
 			dietComService.addDietCom(post);
 			
 			return "forward:/dietcom/getDietCom?postNo"+post.getPostNo();
 		}
+		
+		@RequestMapping(value="profileUpload")
+		   public void profileUpload(MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws Exception{
+			System.out.println("111111");
+			
+			dietComService.profileUpload(file, request, response);
+		   } 
 		
 		@RequestMapping(value = "getDietCom", method = RequestMethod.GET)
 		public String getDietCom(@RequestParam("postNo") String postNo, Model model) throws Exception{

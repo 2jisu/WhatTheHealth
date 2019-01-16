@@ -64,7 +64,7 @@ public class DietComServiceImpl implements DietComService {
 			f.mkdirs();
 		}
 		file.transferTo(f);
-		out.println("/resources/images/upload/"+strFileName);
+		out.print("/resources/images/upload/"+strFileName);
 		out.close();
 	}
 	

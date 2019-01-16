@@ -18,8 +18,8 @@
 
 	 $(document).ready(function() {
         $('#summernote').summernote({
-        		height: 300,
-        		
+        		height: 500,
+        		width : 750,
         		callbacks: {
                    onImageUpload: function(files) {
                 	   console.log(files)
@@ -29,12 +29,12 @@
     });
         
         function sendFile(file) {
-        	 console.log(file)
+        	 console.log("file:"+file)
         	 var data2 = new FormData();
         	 data2.append("file", file);
         	 console.log(data2)
                 $.ajax({
-                    url: '/dietCom/addDietCom',
+                    url: '/dietCom/profileUpload',
                     method: "POST",
                     enctype : 'multipart/form-data',
                     data : data2,
