@@ -3,29 +3,39 @@ package com.wthealth.domain;
 public class BMI {
 
 	//Field
-	private String gendar;	
-	private Double height; // endUser Å°
-	private Double bmiWeight; //endUser ¸ö¹«°Ô
-	private int age; // endUser ³ªÀÌ
-	private Double bmiValue; //endUser 
-	private String bmiState; //ºñ¸¸ Ã´µµ
+	private Double height;
+	private Double weight;
+	private Double bmiValue;
+	private String bmiState;
 	
 	//Constructor
-	public BMI(Double height, Double bmiWeight){
-		this.bmiValue = bmiWeight/height*height;
+	public BMI() {
+		
 	}
+	
+	public BMI(Double height, Double bmiWeight){
+		
+		height = height/100;
 
-	public BMI(Double bmiValue) {
+		this.bmiValue = bmiWeight/(height*height);
+				
+		this.bmiValue = Math.round(bmiValue*100)/100.0;
+		
+		
+		
+		if(bmiValue<18.5){
+			this.bmiState = "ï¿½ï¿½Ã¼ï¿½ï¿½"; 
+		}else if(18.5<bmiValue && bmiValue<25) {
+			this.bmiState = "ï¿½ï¿½ï¿½ï¿½";
+		}else if(25<bmiValue && bmiValue<30) {
+			this.bmiState = "ï¿½ï¿½Ã¼ï¿½ï¿½";
+		}else if(30<bmiValue) {
+			this.bmiState = "ï¿½ï¿½";
+		}
+		
 	}
 	
 	//Method
-	public String getGendar() {
-		return gendar;
-	}
-
-	public void setGendar(String gendar) {
-		this.gendar = gendar;
-	}
 
 	public Double getHeight() {
 		return height;
@@ -35,21 +45,21 @@ public class BMI {
 		this.height = height;
 	}
 
-	public Double getBmiWeight() {
-		return bmiWeight;
+	public Double getWeight() {
+		return weight;
 	}
 
-	public void setBmiWeight(Double bmiWeight) {
-		this.bmiWeight = bmiWeight;
+	public void setWeight(Double weight) {
+		this.weight = weight;
 	}
 
-	public int getAge() {
+/*	public int getAge() {
 		return age;
 	}
 
 	public void setAge(int age) {
 		this.age = age;
-	}
+	}*/
 
 	public Double getBmiValue() {
 		return bmiValue;
@@ -69,12 +79,8 @@ public class BMI {
 
 	@Override
 	public String toString() {
-		return "BMI [gendar=" + gendar + ", height=" + height + ", bmiWeight=" + bmiWeight + ", age=" + age
-				+ ", bmiValue=" + bmiValue + ", bmiState=" + bmiState + "]";
+		return "BMI [height=" + height + ", weight=" + weight + ", bmiValue=" + bmiValue + ", bmiState=" + bmiState
+				+ "]";
 	}
-	
-	
-	
-
 	
 }
