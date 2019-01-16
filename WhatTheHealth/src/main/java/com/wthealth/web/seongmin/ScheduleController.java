@@ -1,12 +1,9 @@
 package com.wthealth.web.seongmin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,10 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wthealth.domain.DietSchedule;
-import com.wthealth.domain.ExSchedule;
+import com.wthealth.domain.User;
 import com.wthealth.service.dietschedule.DietScheduleService;
 import com.wthealth.service.exschedule.ExScheduleService;
 
@@ -142,10 +137,10 @@ public class ScheduleController {
 	}
 	*/
 	@RequestMapping(value="listSchedule")
-	public String listProduct(@RequestParam("") String userId, Model model , HttpServletResponse response, HttpServletRequest request) throws Exception{
+	public String listProduct(/*@RequestParam("userId") String userId,*/ Model model, HttpSession session) throws Exception{
 		
 		System.out.println("/listSchedule : GET / POST");
-		
+		String userId=((User)session.getAttribute("user")).getUserId();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("dietList", dietScheduleService.listDietSchedule(userId));
 		map.put("exList", exScheduleService.listExSchedule(userId));
