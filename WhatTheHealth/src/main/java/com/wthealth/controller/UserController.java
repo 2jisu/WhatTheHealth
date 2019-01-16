@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wthealth.web.controller.jisu.KakaoLogin;
+import com.wthealth.controller.KakaoLogin;
 import com.wthealth.domain.NaverLogin;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.wthealth.domain.User;

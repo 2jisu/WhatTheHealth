@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.wthealth.common.Search;
 import com.wthealth.domain.Point;
 import com.wthealth.service.point.PointDao;
-import com.wthealth.web.controller.jisu.URLConnection;
+import com.wthealth.controller.URLConnection;
 
 @Repository("pointDaoImpl")
 public class PointDaoImpl implements PointDao {

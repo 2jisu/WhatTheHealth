@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wthealth.web.controller.jisu.Config;
+import com.wthealth.controller.Config;
 import com.wthealth.domain.User;
 import com.wthealth.service.user.UserService;
 

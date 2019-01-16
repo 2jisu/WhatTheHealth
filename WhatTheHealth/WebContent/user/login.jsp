@@ -114,7 +114,7 @@
 	<!-- ToolBar Start /////////////////////////////////////-->
 	<div class="navbar  navbar-default">
         <div class="container">
-        	<a class="navbar-brand" href="/index.jsp">What The Health</a>
+        	<a class="navbar-brand" href="/main.jsp">What The Health</a>
    		</div>
    	</div>
    	<!-- ToolBar End /////////////////////////////////////-->	
