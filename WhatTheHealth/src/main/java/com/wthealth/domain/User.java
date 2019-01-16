@@ -22,9 +22,9 @@ public class User {
 	private int havingPoint;
 	private String role;
 	private String snsType;
-	private int idToken;
-	private int accessToken;
-	private int refreshToken;
+	private String idToken;
+	private String accessToken;
+	private String refreshToken;
 	
 	///Constructor
 	public User(){
@@ -166,27 +166,27 @@ public class User {
 		this.snsType = snsType;
 	}
 
-	public int getIdToken() {
+	public String getIdToken() {
 		return idToken;
 	}
 
-	public void setIdToken(int idToken) {
+	public void setIdToken(String idToken) {
 		this.idToken = idToken;
 	}
 
-	public int getAccessToken() {
+	public String getAccessToken() {
 		return accessToken;
 	}
 
-	public void setAccessToken(int accessToken) {
+	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
 
-	public int getRefreshToken() {
+	public String getRefreshToken() {
 		return refreshToken;
 	}
 
-	public void setRefreshToken(int refreshToken) {
+	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
 	}
 

@@ -3,7 +3,7 @@ package com.wthealth.web.controller.jisu;
 public final class Config {
 	public static final String appid = "BIt_Project";
 	public static final String apikey = "90df16b2fd3911e88f460cc47a1fcfae";
-	public static final String content = "인증 테스트";
+	public static String content;
 	public static final String sender = "01092968532";
 	private static String receiver;
 	
@@ -30,7 +30,7 @@ public final class Config {
 
 	public void setApikey(String apikey) {
 		this.apikey = apikey;
-	}
+	}*/
 
 	public String getContent() {
 		return content;
@@ -39,7 +39,7 @@ public final class Config {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+/*
 	public String getSender() {
 		return sender;
 	}

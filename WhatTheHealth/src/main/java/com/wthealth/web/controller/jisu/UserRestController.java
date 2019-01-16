@@ -98,7 +98,7 @@ public class UserRestController {
 	}
 	
 	@RequestMapping( value="json/sendSMS", method=RequestMethod.POST )
-	public void sendSMS(@RequestBody String phone) throws Exception{
+	public void sendSMS(@RequestBody String phone, HttpSession session) throws Exception{
 	
 		System.out.println("/user/json/sendSMS : POST");
 		System.out.println("/user/json/sendSMS : phone "+phone);
@@ -107,6 +107,12 @@ public class UserRestController {
 		Config config = new Config();
 		String[] setphone = phone.split("=");
 		config.setReceiver(setphone[1]);
+		
+		String authNum = "";
+		authNum = RandomNum();
+		config.setContent("인증번호 ["+authNum+"]를 입력해주세요.");
+		
+		session.setAttribute("authNum", authNum);
 		
 		 String hostname = "api.bluehouselab.com";
 	        String url = "https://"+hostname+"/smscenter/v1.0/sendsms";
@@ -157,16 +163,16 @@ public class UserRestController {
 
 	    }
 	
-	@RequestMapping(value = "json/sendMail",  method=RequestMethod.POST) 
-	public void sendMail(@RequestBody String email, HttpSession session) throws AddressException, MessagingException {
+	@RequestMapping(value = "json/sendMail/{email1}/{email2}",  method=RequestMethod.GET) 
+	public void sendMail(@PathVariable String email1, @PathVariable String email2, HttpSession session) throws AddressException, MessagingException {
 		
 		System.out.println("/user/json/sendMail");
-		System.out.println("/user/json/sendMail:"+email);
+		System.out.println("/user/json/sendMail:"+email1+email2);
 
 		String authNum = "";
 		authNum = RandomNum();
 		
-	    sendEmail(email, authNum);
+	    sendEmail(email1+"."+email2, authNum);
 	    
 	    session.setAttribute("authNum", authNum);
 	    

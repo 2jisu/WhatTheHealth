@@ -69,15 +69,15 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public void naverLogin(User user) throws Exception{
-		sqlSession.insert("UserMapper.naverLogin", user);
+	public void snsLogin(User user) throws Exception{
+		sqlSession.insert("UserMapper.snsLogin", user);
 	}
 	
-	@Override
+	/*@Override
 	public void kakaoLogin(User user) throws Exception{
 		sqlSession.insert("UserMapper.kakaoLogin", user);
 	}
-
+*/
 	@Override
 	public int getTotalCount(Search search) throws Exception {
 		// TODO Auto-generated method stub

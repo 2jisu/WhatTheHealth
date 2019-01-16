@@ -1,6 +1,7 @@
 package com.wthealth.web.controller.jisu;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.codehaus.jackson.JsonNode;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.wthealth.web.controller.jisu.KakaoLogin;
+import com.wthealth.domain.NaverLogin;
+import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.wthealth.domain.User;
 import com.wthealth.service.user.UserService;
 
@@ -40,6 +45,19 @@ public class UserController {
 	
 	@Resource(name = "mailSender")
 	private JavaMailSender javaMailSender;
+	
+	private NaverLogin naverLogin;
+	
+	@Resource(name = "naverLogin")
+	private void setNaverLogin(NaverLogin naverLogin){
+		this.naverLogin = naverLogin;
+	}
+
+	
+	private String apiResult = null;
+	
+	JsonStringParse jsonparse = new JsonStringParse();
+
 
 	public UserController() {
 		// TODO Auto-generated constructor stub
@@ -55,7 +73,7 @@ public class UserController {
 	@RequestMapping( value="login", method=RequestMethod.GET )
 	public String login() throws Exception{
 		
-		System.out.println("/user/logon : GET");
+		System.out.println("/user/login : GET");
 
 		return "redirect:/user/login.jsp";
 	}
@@ -65,13 +83,22 @@ public class UserController {
 		
 		System.out.println("/user/login : POST");
 		//Business Logic
+		System.out.println("아이디:"+user.getUserId());
 		User dbUser=userService.getUser(user.getUserId());
 		
-		if( user.getPassword().equals(dbUser.getPassword()) && user.getUserStatus() == "0"){
-			session.setAttribute("user", dbUser);
-		}
+		System.out.println("로그인 왜안돼:"+dbUser);
+		System.out.println(user.getPassword());
+		System.out.println(dbUser.getPassword());
+		System.out.println(dbUser.getUserStatus());
 		
-		return "redirect:/main.jsp";
+		
+		if( user.getPassword().equals(dbUser.getPassword())&& dbUser.getUserStatus().equals("0")){
+			session.setAttribute("user", dbUser);
+			System.out.println("if문 들어왔나");
+		}
+		System.out.println("세션에 들어갔나: "+session.getAttribute("user"));
+		
+		return "redirect:/index.jsp";
 	}
 		
 	
@@ -82,7 +109,7 @@ public class UserController {
 		
 		session.invalidate();
 		
-		return "redirect:/main.jsp";
+		return "redirect:/index.jsp";
 	}
 	
 	@RequestMapping( value="addUser", method=RequestMethod.GET )
@@ -98,11 +125,18 @@ public class UserController {
 
 		System.out.println("/user/addUser : POST");
 		//Business Logic
-		String filePath = "C:\\Users\\bit\\git\\WhatTheHealth\\WhatTheHealth\\";
-		File file = new File(filePath , uploadFile.getOriginalFilename());
-		uploadFile.transferTo(file); 
-		user.setUserImage(uploadFile.getOriginalFilename());
-		userService.addUser(user);
+		if(uploadFile.getOriginalFilename()!=null) {
+			String filePath = "C:\\Users\\bit\\git\\WhatTheHealth\\WhatTheHealth\\WebContent\\resources\\images\\userImage\\";
+			File file = new File(filePath , uploadFile.getOriginalFilename());
+			uploadFile.transferTo(file); 
+			user.setUserImage(uploadFile.getOriginalFilename());
+			userService.addUser(user);
+			System.out.println("사진 있을 때: "+user.getUserImage());
+			
+		} else {
+			userService.addUser(user);
+			System.out.println("없을때: "+user.getUserImage());
+		}
 		
 		return "redirect:/user/login.jsp";
 	}
@@ -120,6 +154,8 @@ public class UserController {
 		System.out.println(profile);
 		User user = KakaoLogin.changeData(profile);
 		user.setUserId("k"+user.getUserId());
+		user.setAccessToken(token.path("access_token").toString());
+		user.setSnsType("1");
 
 		/*System.out.println(session);
 		session.setAttribute("user", vo);
@@ -128,9 +164,8 @@ public class UserController {
 		
 		if(userService.getUser(user.getUserId())==null) {
 			//vo.setPassword(vo.getUserId());
-			userService.addUser(user);
-			System.out.println("디비에 들어갔나");
 			session.setAttribute("user", user);
+			return "redirect:/user/kakaoLogin.jsp";
 		} else if(userService.getUser(user.getUserId())!=null) {
 			User dbUser=userService.getUser(user.getUserId());
 			session.setAttribute("user", dbUser);
@@ -142,7 +177,50 @@ public class UserController {
 	
 		 //vo = service.kakaoLogin(vo);  
 		//return "redirect:/index.jsp";
-		return "redirect:/user/kakaoLogin.jsp";
+		return "redirect:/index.jsp";
+	}
+	
+	@RequestMapping(value="naverLogin")
+	public ModelAndView naverLogin(HttpSession session) {
+		/* 네아로 인증 URL을 생성하기 위하여 getAuthorizationUrl을 호출 */
+		String naverAuthUrl = naverLogin.getAuthorizationUrl(session);
+		System.out.println("controller 호출");
+		System.out.println(naverAuthUrl);
+		
+		//model.addAttribute("user/naverLogin", naverAuthUrl);
+		//model.addAttribute("url", naverAuthUrl);
+		return new ModelAndView("/user/loginNaver.jsp", "url", naverAuthUrl);
+		//return "redirect:/user/callBack.jsp";
+	}
+
+	@RequestMapping(value="callback")
+	public ModelAndView callback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model) throws IOException {
+		/* 네아로 인증이 성공적으로 완료되면 code 파라미터가 전달되며 이를 통해 access token을 발급 */
+		System.out.println("callbackkkkk");
+		OAuth2AccessToken oauthToken = naverLogin.getAccessToken(session, code, state);
+		apiResult = naverLogin.getUserProfile(oauthToken);
+		//System.out.println(apiResult);
+
+		JSONObject jsonobj = jsonparse.stringToJson(apiResult, "response");
+		String gender = jsonparse.JsonToString(jsonobj, "gender");
+		String snsId = jsonparse.JsonToString(jsonobj, "id");
+		String name = jsonparse.JsonToString(jsonobj, "name");
+
+		User user = new User();
+		user.setUserId(snsId);
+		user.setNickName(name);
+
+		System.out.println(name);
+		try {
+			userService.addUser(user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		session.setAttribute("user",user);
+		return new ModelAndView("/user/callBack.jsp", "result", user);
+		//return "redirect:/user/login.jsp";
 	}
 	
 	@RequestMapping( value="getUser", method=RequestMethod.GET )
@@ -180,7 +258,7 @@ public class UserController {
 			userService.updateUser(user);
 			System.out.println("같을때: "+user.getUserImage());
 		} else {
-			String filePath = "C:\\Users\\bit\\git\\11MVC\\11.Model2MVCShop\\WebContent\\images\\uploadFiles\\";
+			String filePath = "C:\\Users\\bit\\git\\WhatTheHealth\\WhatTheHealth\\WebContent\\resources\\images\\userImage\\";
 			File file = new File(filePath , uploadFile.getOriginalFilename());
 			uploadFile.transferTo(file); 
 			user.setUserImage(uploadFile.getOriginalFilename());
@@ -220,7 +298,7 @@ public class UserController {
 			session.invalidate();
 		}
 		
-		return "redirect:/main.jsp";
+		return "redirect:/index.jsp";
 	}
 	
 	@RequestMapping( value="findId", method=RequestMethod.GET )

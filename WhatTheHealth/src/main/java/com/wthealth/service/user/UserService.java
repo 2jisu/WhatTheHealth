@@ -22,9 +22,9 @@ public interface UserService {
 		
 		public void findPassword(User user) throws Exception;
 		
-		public void naverLogin(User user) throws Exception;
+		public void snsLogin(User user) throws Exception;
 		
-		public void kakaoLogin(User user) throws Exception;
+		//public void kakaoLogin(User user) throws Exception;
 		
 		public boolean checkId(String userId) throws Exception;
 		

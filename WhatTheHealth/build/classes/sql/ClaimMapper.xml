@@ -18,6 +18,41 @@
 		<result property="targetNo" 				column="claim_target_no" 				jdbcType="VARCHAR" />
 		<result property="claimContents" 		column="claim_contents" 				jdbcType="VARCHAR" />	
 	</resultMap>
+	
+	<resultMap id="postSelectMap" type="com.wthealth.domain.Post">
+		<result property="postNo" column="post_no" jdbcType="VARCHAR" />
+		<result property="userId" column="user_id" jdbcType="VARCHAR" />
+		<result property="title" column="title" jdbcType="VARCHAR" />
+		<result property="contents" column="contents" jdbcType="VARCHAR" />
+		<result property="photo" column="photo" jdbcType="VARCHAR" />
+		<result property="video" column="video" jdbcType="VARCHAR" />
+		<result property="clickCount" column="click_count" jdbcType="NUMERIC" />
+		<result property="blindStatus" column="blind_status" jdbcType="VARCHAR" />
+		<result property="deleteStatus" column="delete_status"
+			jdbcType="VARCHAR" />
+		<result property="likeCount" column="like_count" jdbcType="NUMERIC" />
+		<result property="category" column="category" jdbcType="VARCHAR" />
+		<result property="postDate" column="post_date" jdbcType="DATE" />
+		<result property="exScNo" column="ex_sc_no" jdbcType="NUMERIC" />
+		<result property="dietScNo" column="diet_sc_no" jdbcType="NUMERIC" />
+		<result property="locationTagName" column="locationtag_name"
+			jdbcType="VARCHAR" />
+		<result property="xCoordinate" column="x_coordinate" jdbcType="NUMERIC" />
+		<result property="yCoordinate" column="y_coordinate" jdbcType="NUMERIC" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="replySelectMap" type="com.wthealth.domain.Reply">
+		<result property="replyNo" 			column="reply_no" 			jdbcType="NUMERIC"/>
+		<result property="parentReplyNo"	column="parent_reply_no" 		jdbcType="NUMERIC" />
+		<result property="reReplyNo" 	column="rereply_no" 		jdbcType="NUMERIC" />
+		<result property="replyDate" 				column="reply_date" 					jdbcType="DATE" />
+		<result property="postNo" 				column="post_no" 					jdbcType="VARCHAR" />
+		<result property="text" 			column="text" 		jdbcType="VARCHAR" />
+		<result property="writerId" 				column="writer_id" 					jdbcType="VARCHAR" />
+		<result property="blindStatus" 			column="blind_status" 				jdbcType="VARCHAR"  />
+		<result property="deleteStatus" 		column="delete_status" 			jdbcType="VARCHAR" />
+	</resultMap>
 		
 	<!-- SQL : INSERT DIET_SC -->
 	<insert 	id="addClaim"		parameterType="com.wthealth.domain.Claim" >
@@ -34,14 +69,14 @@
 	 </select>
 	 
 	   <!-- SQL : SELECT  -->
-	 <select 	id="getClaimedPost"	 parameterType="int"	 resultMap="com.wthealth.domain.Post">
+	 <select 	id="getClaimedPost"	 parameterType="int"	 resultMap="postSelectMap">
 		SELECT user_Id
 		FROM post 
 		WHERE post_no= #{targetNo}
 	 </select>
 	 
 	    <!-- SQL : SELECT  -->
-	 <select 	id="getClaimedReply"	 parameterType="int"	 resultMap="com.wthealth.domain.Reply">
+	 <select 	id="getClaimedReply"	 parameterType="int"	 resultMap="replySelectMap">
 		SELECT user_Id
 		FROM reply 
 		WHERE reply_no= #{targetNo}
