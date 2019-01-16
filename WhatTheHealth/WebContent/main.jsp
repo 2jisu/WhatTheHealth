@@ -120,7 +120,7 @@
         </div>
       </div>   -->
 
-      <div class="site-blocks-cover" style="background-image: url(/resources/images/hero_bg_1.jpg);" data-aos="fade" data-stellar-background-ratio="0.5">
+      <div class="site-blocks-cover" style="background-image: url(/resources/images/22222.jpg);" data-aos="fade" data-stellar-background-ratio="0.5">
         <div class="container">
           <div class="row align-items-center justify-content-center">
             <div class="col-md-7 text-center" data-aos="fade">
@@ -506,7 +506,7 @@
     
 
 
-    <div class="block-schedule overlay site-section" style="background-image: url('images/hero_bg_1.jpg');">
+    <div class="block-schedule overlay site-section" style="background-image: url('resources/images/22222.jpg');">
       <div class="container">
 
         <h2 class="text-white display-4 mb-5">Schedule</h2>
