@@ -1,4 +1,4 @@
-package com.wthealth.web.controller.jisu;
+package com.wthealth.controller;
 
 import java.io.File;
 import java.io.IOException;
