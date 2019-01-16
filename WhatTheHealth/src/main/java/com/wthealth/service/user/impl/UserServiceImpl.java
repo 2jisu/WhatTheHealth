@@ -61,16 +61,16 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void naverLogin(User user) throws Exception {
+	public void snsLogin(User user) throws Exception {
 		// TODO Auto-generated method stub
-		userDao.naverLogin(user);
+		userDao.snsLogin(user);
 	}
-
+/*
 	@Override
 	public void kakaoLogin(User user) throws Exception {
 		// TODO Auto-generated method stub
 		userDao.kakaoLogin(user);
-	}
+	}*/
 
 	@Override
 	public boolean checkId(String userId) throws Exception {

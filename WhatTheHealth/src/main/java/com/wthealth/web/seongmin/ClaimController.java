@@ -52,9 +52,9 @@ public class ClaimController {
 	@RequestMapping(value="addClaimPost", method = RequestMethod.GET)
 	public String addClaim(@RequestParam("targetNo") int targetNo, Model model) throws Exception {
 
-		System.out.println("/addClaim : GET");
+		System.out.println("/addClaimPost : GET");
 		Post claimedPost=claimService.getClaimedPost(targetNo);
-		model.addAttribute("claimedUserId", claimedPost.getUserId());
+		model.addAttribute("claimed", claimedPost);
 		
 	
 		
@@ -66,7 +66,7 @@ public class ClaimController {
 
 		System.out.println("/addClaimReply : GET");
 		Reply claimedReply = claimService.getClaimedReply(targetNo);
-		model.addAttribute("claimedUserId", claimedReply.getWriterId());
+		model.addAttribute("claimed", claimedReply);
 		
 	
 		

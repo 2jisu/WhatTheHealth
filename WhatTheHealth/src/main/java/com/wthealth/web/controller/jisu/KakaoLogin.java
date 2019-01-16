@@ -103,15 +103,18 @@ public class KakaoLogin {
 	public static User changeData(JsonNode userInfo) throws Exception {
 		User user = new User();
 
-		user.setUserId(userInfo.path("id").asText()); // id -> vo 넣기
+		user.setUserId(userInfo.path("id").asText());
+		user.setIdToken(userInfo.path("id").asText());// id -> vo 넣기
 		user.setPassword(userInfo.path("password").asText());
 
 		if (userInfo.path("kaccount_email_verified").asText().equals("true")) { // 이메일 받기 허용 한 경우
 			user.setEmail(userInfo.path("kaccount_email").asText()); // email -> vo 넣기
 
-		} else { // 이메일 거부 할 경우 코드 추후 개발
+		} 
+		if (userInfo.path("kaccount_gender_verified").asText().equals("true")) { // 이메일 받기 허용 한 경우
+			user.setEmail(userInfo.path("kaccount_gender").asText()); // email -> vo 넣기
 
-		}
+		} 
 
 		JsonNode properties = userInfo.path("properties"); // 추가정보 받아오기
 		if (properties.has("nickname"))

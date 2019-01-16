@@ -104,5 +104,51 @@ public class PointController {
 		int receivePoint = receiveUser.getHavingPoint() + point.getUsingPoint();
 		receiveUser.setHavingPoint(receivePoint);
 	}
+	
+	@RequestMapping(value="kakaoPay")
+	public String kakaoPayReady(@RequestParam("userId") String userId,
+								@RequestParam("point") int point) throws Exception {
+		
+		//Map<String, Object> map = commonService.getAceessToken(code);
+		
+		String url = pointService.getPaymentReady(null, point);
+		
+		return "redirect:"+url;
+	}
+	
+	@RequestMapping(value="kakaoPay/success")
+	public String kakaoPayApprove(@RequestParam("pg_token") String pgToken, HttpSession session, Model model) throws Exception {
+		
+		String userId = ((User)session.getAttribute("user")).getUserId();
+		
+		System.out.println("pg_token :: "+pgToken);
+		
+		Map<String, Object> result = pointService.getPaymentApprove(null, pgToken);
+		
+		Point point = new Point();
+		point.setUsingPoint((int)result.get("point"));
+		point.setSenderId(userId);
+		pointService.addPoint(point);
+		
+		System.out.println(result);
+		
+		User user = userService.getUser(userId);
+		user.setHavingPoint((int)result.get("point"));
+		userService.updateHavingPoint(user);
+		
+		// 가격 amount.total && amout.vat (부가세)
+		// 수량 quantity
+		// 승인일 approved_at
+		// 결제 시작일 ? created_at
+		/*
+		 * approvedDate & point
+		 * */
+		model.addAllAttributes(result);
+		model.addAttribute("user", user);
+		model.addAttribute("point", pointService.getPoint(point.getPointNo()));
+		
+		return "forward:/point/chargeSuccessPoint.jsp";
+		
+	}
 
 }

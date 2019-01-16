@@ -1,6 +1,17 @@
 package com.wthealth.web.controller.jjbly;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sound.midi.Synthesizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wthealth.common.Page;
 import com.wthealth.common.Search;
@@ -18,7 +30,7 @@ import com.wthealth.domain.Post;
 import com.wthealth.service.dietcom.DietComService;
 
 @Controller
-@RequestMapping("/dietcom/*")
+@RequestMapping("/dietCom/*")
 public class DietComController {
 	
 	@Autowired
@@ -40,17 +52,27 @@ public class DietComController {
 		public String addDietCom() throws Exception{
 			System.out.println("addDietCom : GET");
 						 
-			return "redirect:/dietcom/addDietCom.jsp";
+			Post dietCom = new Post();
+			dietCom.setUserId("user1");
+			
+			return "forward:/dietcom/addDietCom.jsp";
 		}
 		
 		@RequestMapping(value = "addDietCom", method = RequestMethod.POST)
-		public String addDietCom(@ModelAttribute("post") Post post) throws Exception{
+		public String addDietCom(@ModelAttribute("post") Post post, HttpSession session) throws Exception{
 			System.out.println("/addDietCom : POST");
 			
 			dietComService.addDietCom(post);
 			
 			return "forward:/dietcom/getDietCom?postNo"+post.getPostNo();
 		}
+		
+		@RequestMapping(value="profileUpload")
+		   public void profileUpload(MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws Exception{
+			System.out.println("111111");
+			
+			dietComService.profileUpload(file, request, response);
+		   } 
 		
 		@RequestMapping(value = "getDietCom", method = RequestMethod.GET)
 		public String getDietCom(@RequestParam("postNo") String postNo, Model model) throws Exception{

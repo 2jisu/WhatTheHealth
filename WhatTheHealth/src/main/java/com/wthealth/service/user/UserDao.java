@@ -23,9 +23,9 @@ public interface UserDao {
 		
 		public void findPassword(User user) throws Exception;
 		
-		public void naverLogin(User user) throws Exception;
+		public void snsLogin(User user) throws Exception;
 		
-		public void kakaoLogin(User user) throws Exception;
+		//public void kakaoLogin(User user) throws Exception;
 		
 		public void updateHavingPoint(User user) throws Exception;
 		
