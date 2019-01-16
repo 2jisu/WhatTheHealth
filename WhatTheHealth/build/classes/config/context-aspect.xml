@@ -21,5 +21,7 @@
 					pointcut="execution(* com.wthealth.service..*Impl.*(..) )"	method="invoke"/>
 	 	</aop:aspect>
 	 </aop:config>
+	 
+	
 
 </beans>

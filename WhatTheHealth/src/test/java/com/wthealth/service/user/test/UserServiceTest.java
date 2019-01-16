@@ -71,7 +71,7 @@ public class UserServiceTest {
 		user.setPhone("010-000-0000");
 		user.setEmail("test@naver.com");
 		
-		userService.naverLogin(user);
+		userService.snsLogin(user);
 			
 		user = userService.getUser("naverTest");
 

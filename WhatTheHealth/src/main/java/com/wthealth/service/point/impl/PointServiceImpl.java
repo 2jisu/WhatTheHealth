@@ -59,6 +59,26 @@ public class PointServiceImpl implements PointService {
 		
 	}
 
+	@Override
+	public String getPaymentReady(String token, int point) throws Exception {
+		// TODO Auto-generated method stub
+		if(token == null) {
+			return pointDao.getKakaoPayReady(point);
+		} else {
+			return pointDao.getKakaoPayReady(token, point);
+		}
+	}
+
+	@Override
+	public Map<String, Object> getPaymentApprove(String token, String pgToken) throws Exception {
+		// TODO Auto-generated method stub
+		if(token == null) {
+			return pointDao.getKakaoPayApprove(pgToken);
+		} else {
+			return pointDao.getKakaoPayApprove(token, pgToken);
+		}
+	}
+
 	
 
 }
