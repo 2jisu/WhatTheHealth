@@ -25,6 +25,19 @@
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		
+		$( "a[href='#' ]:contains('Login')").on("click", function(){
+			self.location = "/user/login"	
+	 	 });
+		
+		$( "a[href='#' ]:contains('Logout')").on("click", function(){
+			self.location = "/user/logout"	
+	 	 });
+		
+		$( "#main").on("click", function(){
+			self.location = "/"	
+	 	 });
+		
 		 /////////////////////////////////////// 운동꿀팁 메뉴바 ///////////////////////////////////////
 		 $( "a[href='#' ]:contains('운동꿀팁')").on("click", function(){
 			self.location = "/exInfo/listExInfo"
@@ -139,10 +152,13 @@
  		  $( "a[href='#' ]:contains('환급관리')").on("click", function(){
 				self.location = "/refund/listRefund"	//////???????????
 		  }); 
-			 
+ 		  
+ 		 	 
 
 		 
 	});
+	
+	
 	
 	</script>
 	
@@ -169,6 +185,13 @@
     <link rel="stylesheet" href="/resources/css/style.css">
     
   </head>
+  
+  <style>
+  #main {
+  		color: white;
+		}
+  </style>
+  
   <body>
   
   <div class="site-wrap">
@@ -195,13 +218,25 @@
             </div>
             <div class="col-6">
               <div class="d-flex ml-auto">
+              
                 <a href="#" class="d-flex align-items-center ml-auto mr-4">
+                	<c:if test="${user.userId != null}"> 
                   <span class="icon-envelope mr-2"></span>
-                  <span class="d-none d-md-inline-block">youremail@domain.com</span>
+                  <span class="d-none d-md-inline-block">${user.nickName}님 환영합니다!</span>
+                   </c:if>
                 </a>
-                <a href="tel://12912830302" class="d-flex align-items-center">
+               
+                <!-- <a href="tel://12912830302" class="d-flex align-items-center">
                   <span class="icon-phone mr-2"></span>
                   <span class="d-none d-md-inline-block">+1 291 2830 302</span>
+                </a> -->
+                <a href="#" class="d-flex align-items-center">
+                 <c:if test="${user.userId == null}"> 
+                  <span class="d-none d-md-inline-block">Login</span>
+                  </c:if>
+                   <c:if test="${user.userId != null}"> 
+                   <span class="d-none d-md-inline-block">Logout</span>
+                   </c:if>
                 </a>
               </div>
             </div>
@@ -216,7 +251,7 @@
           <div class="py-1">
             <div class="row align-items-center">
               <div class="col-3">
-                <h2 class="mb-0 site-logo"><a href="index.jsp">What the <strong>Health</strong> </a></h2>
+                <h2 class="mb-0 site-logo" id="main">What the <strong>Health</strong> </a></h2>
               </div>
               <div class="col-9">
                 <nav class="site-navigation text-right" role="navigation">
@@ -264,7 +299,7 @@
                       <li class = "has-children">
                       	<a href="#">라이브방송</a>
                       </li>
-                     <%--  <c:if test="${sessionScope.user.role == 'user'}"> --%>
+                      <c:if test="${sessionScope.user.role == 'user'}"> 
                       <li class = "has-children">
                       	<a href="#">마이페이지</a>
                       	<ul class="dropdown arrow-top">
@@ -275,8 +310,8 @@
                           <li><a href="#">History Chart</a></li>
                         </ul>
                       </li>
-                     <%--  </c:if>
-                      <c:if test="${sessionScope.user.role == 'admin'}"> --%>
+                       </c:if>
+                      <c:if test="${sessionScope.user.role == 'admin'}"> 
                       <li class = "has-children">
                       	<a href="#">관리페이지</a>
                       	<ul class="dropdown arrow-top">
@@ -286,7 +321,7 @@
                           <li><a href="#">환급관리</a></li>
                         </ul>
                       </li>
-                     <%--  </c:if> --%>
+                     </c:if> 
                       
                      <!--  <li><a href="news.html">News</a></li>
                       

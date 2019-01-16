@@ -42,24 +42,34 @@
 	 </insert>
 	 
 	 <!-- SQL : INSERT -->
-	<insert 	id="kakaoLogin"		parameterType="com.wthealth.domain.User" >
+	<insert 	id="snsLogin"		parameterType="com.wthealth.domain.User" >
+	 	INSERT
+		INTO users( user_id , password , nickname , email , user_image, gender, user_phone, reg_date , dlt_date, 
+			holder, bank_name, account_num, claim_count, role, user_status_code, having_point, sns_type_code, id_token, access_token, refresh_token ) 
+		VALUES	 (	#{userId} , #{password} , #{nickName} , #{email:VARCHAR}, #{userImage:VARCHAR}, #{gender}, #{phone:VARCHAR},
+		 	SYSDATE, #{dltDate:DATE}, #{holder:VARCHAR}, #{bankName:VARCHAR}, #{accountNum:VARCHAR}, '0', 'user' , '0', '0', #{snsType},
+		 	#{idToken:VARCHAR}, #{accessToken:VARCHAR}, #{refreshToken:VARCHAR} )
+	 </insert>
+	 
+	 <!-- SQL : INSERT -->
+	<!-- <insert 	id="kakaoLogin"		parameterType="com.wthealth.domain.User" >
 	 	INSERT
 		INTO users( user_id , password , nickname , email , user_image, gender, user_phone, reg_date , dlt_date, 
 			holder, bank_name, account_num, claim_count, role, user_status_code, having_point, sns_type_code, id_token, access_token, refresh_token ) 
 		VALUES	 (	#{userId} , #{password} , #{nickName} , #{email:VARCHAR}, #{userImage:VARCHAR}, #{gender}, #{phone:VARCHAR},
 		 	SYSDATE, #{dltDate:DATE}, #{holder:VARCHAR}, #{bankName:VARCHAR}, #{accountNum:VARCHAR}, '0', 'user' , '0', '0', '1',
 		 	#{idToken:VARCHAR}, #{accessToken:VARCHAR}, #{refreshToken:VARCHAR} )
-	 </insert>
+	 </insert> -->
 	 
 	 <!-- SQL : INSERT -->
-	<insert 	id="naverLogin"		parameterType="com.wthealth.domain.User" >
+	<!-- <insert 	id="naverLogin"		parameterType="com.wthealth.domain.User" >
 	 	INSERT
 		INTO users( user_id , password , nickname , email , user_image, gender, user_phone, reg_date , dlt_date, 
 			holder, bank_name, account_num, claim_count, role, user_status_code, having_point, sns_type_code, id_token, access_token, refresh_token ) 
 		VALUES	 (	#{userId} , #{password} , #{nickName} , #{email:VARCHAR}, #{userImage:VARCHAR}, #{gender}, #{phone:VARCHAR},
 		 	SYSDATE, #{dltDate:DATE}, #{holder:VARCHAR}, #{bankName:VARCHAR}, #{accountNum:VARCHAR}, '0', 'user' , '0', '0', '2',
 		 	#{idToken:VARCHAR}, #{accessToken:VARCHAR}, #{refreshToken:VARCHAR} )
-	 </insert>
+	 </insert> -->
 	 
 	 <!-- SQL : SELECT ONE -->
 	 <select 	id="getUser"	parameterType="string"	resultMap="userSelectMap">
